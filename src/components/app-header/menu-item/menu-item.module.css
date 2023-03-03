@@ -1,0 +1,6 @@
+.link {
+  display: flex;
+  align-items: center;
+  color: var(--text-primary-color);
+  text-decoration: none;
+}

@@ -1,11 +1,15 @@
-import React from "react";
-import logo from "./logo.svg";
-import styles from "./app.module.css";
+import { AppHeader } from "../app-header/app-header";
+import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
+import { BurgerContructor } from "../burger-constructor/burger-constructor";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header"></header>
+      <AppHeader />
+      <main>
+        <BurgerIngredients />
+        <BurgerContructor />
+      </main>
     </div>
   );
 }

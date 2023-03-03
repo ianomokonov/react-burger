@@ -1,3 +1,3 @@
 export function BurgerContructor() {
-  return <h1>BurgerContructor</h1>;
+  return <h1 className="p-15" >BurgerContructor</h1>;
 }
