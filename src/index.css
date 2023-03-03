@@ -9,3 +9,7 @@ body {
   margin: 0 auto;
   max-width: calc(var(--offset-base-size) * 320);
 }
+
+*{
+  box-sizing: border-box;
+}

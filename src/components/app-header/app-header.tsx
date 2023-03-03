@@ -9,20 +9,22 @@ import { MenuItem } from "./menu-item/menu-item";
 
 export function AppHeader() {
   return (
-    <header className={`container p-4 ${styles["app-header"]}`}>
-      <div className={styles.links}>
-        <MenuItem icon={<BurgerIcon type="primary" />} isAcive={true}>
-          Конструктор
-        </MenuItem>
-        <MenuItem icon={<ListIcon type="secondary" />} isAcive={false}>
-          Лента заказов
-        </MenuItem>
-      </div>
-      <Logo />
-      <div className={styles.links}>
-        <MenuItem icon={<ProfileIcon type="secondary" />} isAcive={false}>
-          Личный кабинет
-        </MenuItem>
+    <header className={styles['app-header']}>
+      <div className={`container pt-4 pb-4 ${styles["app-header__content"]}`}>
+        <div className={styles.links}>
+          <MenuItem icon={<BurgerIcon type="primary" />} isAcive={true}>
+            Конструктор
+          </MenuItem>
+          <MenuItem icon={<ListIcon type="secondary" />} isAcive={false}>
+            Лента заказов
+          </MenuItem>
+        </div>
+        <Logo />
+        <div className={styles.links}>
+          <MenuItem icon={<ProfileIcon type="secondary" />} isAcive={false}>
+            Личный кабинет
+          </MenuItem>
+        </div>
       </div>
     </header>
   );
