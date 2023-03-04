@@ -6,6 +6,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
+import PropTypes from "prop-types";
 
 export function BurgerContructor({
   ingredients,
@@ -64,3 +65,23 @@ export function BurgerContructor({
     </div>
   );
 }
+
+BurgerContructor.propTypes = {
+  className: PropTypes.string,
+  ingredients: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      name: PropTypes.string,
+      type: PropTypes.string,
+      proteins: PropTypes.number,
+      fat: PropTypes.number,
+      carbohydrates: PropTypes.number,
+      calories: PropTypes.number,
+      price: PropTypes.number,
+      image: PropTypes.string,
+      image_mobile: PropTypes.string,
+      image_large: PropTypes.string,
+      __v: PropTypes.number,
+    })
+  ),
+};

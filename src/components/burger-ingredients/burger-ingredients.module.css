@@ -1,25 +1,3 @@
-.ingredient-category__items {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: calc(var(--offset-base-size) * 8) calc(var(--offset-base-size) * 6);
-}
-
-.ingredient {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-.ingredient__price {
-  display: flex;
-  align-items: center;
-}
-
-.ingredient__title {
-  text-align: center;
-}
-
 .ingredients {
   max-height: calc(100% - var(--offset-base-size) * 24);
   overflow: auto;

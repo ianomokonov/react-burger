@@ -11,7 +11,7 @@ function App() {
       <main className={`container pt-10 pl-5 pr-5`}>
         <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
         <div className={styles.content}>
-          <BurgerIngredients />
+          <BurgerIngredients ingredients={data} />
           <BurgerContructor ingredients={data} />
         </div>
       </main>
