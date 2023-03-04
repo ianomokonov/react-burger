@@ -1,5 +1,5 @@
 .main {
-  max-height: calc(var(--offset-base-size) * 116);
+  max-height: calc(100% - var(--offset-base-size) * 74);
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -22,6 +22,22 @@
   align-items: center;
 }
 
-.ingredient__card>span {
-    width: 100%;
+.ingredient__card > span {
+  width: 100%;
+}
+
+.order {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.order__sum {
+  display: flex;
+  align-items: center;
+}
+
+.order__sum svg {
+  width: calc(var(--offset-base-size) * 9);
+  height: calc(var(--offset-base-size) * 9);
 }

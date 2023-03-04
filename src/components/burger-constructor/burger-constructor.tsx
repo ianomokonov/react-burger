@@ -1,13 +1,21 @@
 import {
+  Button,
   ConstructorElement,
+  CurrencyIcon,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
 
-export function BurgerContructor({ ingredients }: BurgerConstructorProps) {
+export function BurgerContructor({
+  ingredients,
+  className,
+}: BurgerConstructorProps) {
+  const getSum = () => {
+    return ingredients.reduce((prev, curr) => prev + curr.price, 0);
+  };
   return (
-    <div className="pl-4">
+    <div className={`pl-4 pb-4 ${className}`}>
       <div className="pl-8">
         <ConstructorElement
           type="top"
@@ -33,7 +41,7 @@ export function BurgerContructor({ ingredients }: BurgerConstructorProps) {
         ))}
       </div>
 
-      <div className="pl-8">
+      <div className="pl-8 mb-10">
         <ConstructorElement
           type="bottom"
           isLocked={true}
@@ -42,6 +50,16 @@ export function BurgerContructor({ ingredients }: BurgerConstructorProps) {
           price={ingredients[ingredients.length - 1].price}
           thumbnail={ingredients[ingredients.length - 1].image}
         />
+      </div>
+
+      <div className={styles.order}>
+        <div className={`${styles.order__sum} mr-10`}>
+          <p className="text text_type_main-large mr-3">{getSum()}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <Button htmlType="button" type="primary" size="large">
+          Оформить заказ
+        </Button>
       </div>
     </div>
   );

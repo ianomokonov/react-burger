@@ -4,3 +4,7 @@
   align-items: flex-start;
   gap: calc(var(--offset-base-size) * 10);
 }
+
+.content > div {
+  height: calc(100vh - var(--offset-base-size) * 49);
+}

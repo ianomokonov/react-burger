@@ -8,10 +8,10 @@ import { IngredientType } from "../../interfaces/ingredient-type";
 import { data } from "../../utils/data";
 import styles from "./burger-ingredients.module.css";
 
-export function BurgerIngredients() {
+export function BurgerIngredients({ className }: { className?: string }) {
   const [currentIngredient, setCurrentIngredient] = useState("buns");
   return (
-    <div>
+    <div className={`${className} pb-4`}>
       <div className="mb-10" style={{ display: "flex" }}>
         <Tab
           value="buns"
