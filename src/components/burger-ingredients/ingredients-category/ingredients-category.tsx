@@ -1,12 +1,13 @@
 import { IngredientsCategoryProps } from "./ingredients-category.props";
 import styles from "./ingredients-category.module.css";
 import { IngredientCard } from "./ingrdient-card/ingredient-card";
+import { FC } from "react";
 
-export function IngredientsCategory({
+export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
   className,
   ingredients,
   name,
-}: IngredientsCategoryProps) {
+}) => {
   return (
     <div className={className}>
       <h3 className="text text_type_main-medium">{name}</h3>
@@ -17,4 +18,4 @@ export function IngredientsCategory({
       </div>
     </div>
   );
-}
+};

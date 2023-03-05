@@ -1,17 +1,33 @@
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { IngredientType } from "../../interfaces/ingredient-type";
 import styles from "./burger-ingredients.module.css";
 import { BurgerIngredientsProps } from "./burger-ingredients.props";
-import PropTypes from "prop-types";
 import { IngredientsCategory } from "./ingredients-category/ingredients-category";
 
-export function BurgerIngredients({
+export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   className,
   ingredients,
-}: BurgerIngredientsProps) {
+}) => {
   const [currentIngredient, setCurrentIngredient] = useState(
     IngredientType.Bun as string
+  );
+  const getCategoryIngredients = useCallback(
+    (type: IngredientType) =>
+      ingredients.filter((d) => (d.type as IngredientType) === type),
+    [ingredients]
+  );
+  const buns = useMemo(
+    () => getCategoryIngredients(IngredientType.Bun),
+    [getCategoryIngredients]
+  );
+  const sauces = useMemo(
+    () => getCategoryIngredients(IngredientType.Sauce),
+    [getCategoryIngredients]
+  );
+  const fillings = useMemo(
+    () => getCategoryIngredients(IngredientType.Main),
+    [getCategoryIngredients]
   );
   return (
     <div className={`${className} pb-4`}>
@@ -42,45 +58,19 @@ export function BurgerIngredients({
         <IngredientsCategory
           className="mb-10"
           name="Булки"
-          ingredients={ingredients.filter(
-            (d) => (d.type as IngredientType) === IngredientType.Bun
-          )}
+          ingredients={buns}
         />
         <IngredientsCategory
           className="mb-10"
           name="Соусы"
-          ingredients={ingredients.filter(
-            (d) => (d.type as IngredientType) === IngredientType.Sauce
-          )}
+          ingredients={sauces}
         />
         <IngredientsCategory
           className="mb-10"
           name="Начинки"
-          ingredients={ingredients.filter(
-            (d) => (d.type as IngredientType) === IngredientType.Main
-          )}
+          ingredients={fillings}
         />
       </div>
     </div>
   );
-}
-
-BurgerIngredients.propTypes = {
-  className: PropTypes.string,
-  ingredients: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    })
-  ),
 };

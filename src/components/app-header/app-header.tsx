@@ -4,12 +4,13 @@ import {
   Logo,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { FC } from "react";
 import styles from "./app-header.module.css";
 import { MenuItem } from "./menu-item/menu-item";
 
-export function AppHeader() {
+export const AppHeader: FC = () => {
   return (
-    <header className={styles['app-header']}>
+    <header className={styles["app-header"]}>
       <div className={`container pt-4 pb-4 ${styles["app-header__content"]}`}>
         <div className={styles.links}>
           <MenuItem icon={BurgerIcon} isActive={true}>
@@ -28,4 +29,4 @@ export function AppHeader() {
       </div>
     </header>
   );
-}
+};

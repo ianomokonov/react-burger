@@ -6,15 +6,15 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
-import PropTypes from "prop-types";
+import { FC, useMemo } from "react";
 
-export function BurgerContructor({
+export const BurgerContructor: FC<BurgerConstructorProps> = ({
   ingredients,
   className,
-}: BurgerConstructorProps) {
-  const getSum = () => {
+}) => {
+  const totalPrice = useMemo(() => {
     return ingredients.reduce((prev, curr) => prev + curr.price, 0);
-  };
+  }, [ingredients]);
   return (
     <div className={`pl-4 pb-4 ${className}`}>
       <div className="pl-8">
@@ -55,7 +55,7 @@ export function BurgerContructor({
 
       <div className={styles.order}>
         <div className={`${styles.order__sum} mr-10`}>
-          <p className="text text_type_main-large mr-3">{getSum()}</p>
+          <p className="text text_type_main-large mr-3">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
         <Button htmlType="button" type="primary" size="large">
@@ -64,24 +64,4 @@ export function BurgerContructor({
       </div>
     </div>
   );
-}
-
-BurgerContructor.propTypes = {
-  className: PropTypes.string,
-  ingredients: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    })
-  ),
 };
