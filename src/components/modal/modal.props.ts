@@ -1,4 +1,4 @@
 export interface ModalProps {
-  title: string;
+  title?: string;
   onClose: () => void;
 }

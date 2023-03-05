@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useCallback, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { ModalProps } from "./modal.props";
 import styles from "./modal.module.css";
@@ -6,12 +6,29 @@ import { ModalOverlay } from "./modal-overlay/modal-overlay";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const modalRoot = document.getElementById("react-modals");
+const ESC_KEY = "Escape";
 
 export const Modal: FC<PropsWithChildren<ModalProps>> = ({
   children,
   onClose,
   title,
 }) => {
+  const escCloseHandler = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === ESC_KEY) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+  useEffect(() => {
+    document.addEventListener("keydown", escCloseHandler);
+
+    return () => {
+      document.removeEventListener("keydown", escCloseHandler);
+    };
+  }, [escCloseHandler]);
+
   if (!modalRoot) {
     return <></>;
   }
