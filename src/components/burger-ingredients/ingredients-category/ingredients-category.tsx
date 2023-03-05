@@ -5,12 +5,13 @@ import { Modal } from "../../modal/modal";
 import { BurgerIngredient } from "../../../interfaces/burger-ingredient";
 import { useState } from "react";
 import { IngredientDetails } from "./ingredient-details/ingredient-details";
+import { FC } from "react";
 
-export function IngredientsCategory({
+export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
   className,
   ingredients,
   name,
-}: IngredientsCategoryProps) {
+}) => {
   const [activeIngredient, setActiveIngredient] = useState<
     BurgerIngredient | undefined
   >();
@@ -42,4 +43,4 @@ export function IngredientsCategory({
       )}
     </>
   );
-}
+};

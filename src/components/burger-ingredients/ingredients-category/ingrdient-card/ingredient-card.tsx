@@ -4,14 +4,15 @@ import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { FC } from "react";
 
-export function IngredientCard({
+export const IngredientCard: FC<IngredientCardProps> = ({
   price,
   name,
   __v,
   image,
   onClick,
-}: IngredientCardProps) {
+}) => {
   return (
     <div className={styles.ingredient} onClick={onClick}>
       <img src={image} alt="" className={styles.ingredient__img} />
@@ -31,4 +32,4 @@ export function IngredientCard({
       )}
     </div>
   );
-}
+};

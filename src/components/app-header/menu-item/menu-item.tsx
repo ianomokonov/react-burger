@@ -1,13 +1,13 @@
-import React, { PropsWithChildren } from "react";
+import React, { FC, PropsWithChildren } from "react";
 import { MenuItemProps } from "./menu-item.props";
 import styles from "./menu-item.module.css";
 
-export function MenuItem({
+export const MenuItem: FC<PropsWithChildren<MenuItemProps>> = ({
   icon,
   className,
   isActive,
   children,
-}: PropsWithChildren<MenuItemProps>) {
+}) => {
   return (
     <a
       href="/"
@@ -21,4 +21,4 @@ export function MenuItem({
       </span>
     </a>
   );
-}
+};
