@@ -10,9 +10,10 @@ export function IngredientCard({
   name,
   __v,
   image,
+  onClick,
 }: IngredientCardProps) {
   return (
-    <div className={styles.ingredient}>
+    <div className={styles.ingredient} onClick={onClick}>
       <img src={image} alt="" className={styles.ingredient__img} />
       <p className={styles.ingredient__price}>
         <span className="mr-4 text text_type_main-default">{price}</span>
