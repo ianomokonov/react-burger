@@ -1,0 +1,4 @@
+.ingredients {
+  max-height: calc(100% - var(--offset-base-size) * 24);
+  overflow: auto;
+}

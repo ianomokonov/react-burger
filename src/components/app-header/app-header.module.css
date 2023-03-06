@@ -1,0 +1,23 @@
+.app-header {
+  background-color: var(--background);
+}
+
+.app-header__content {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 2fr 1fr 2fr;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+}
+
+.links:last-child {
+  justify-content: flex-end;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+}

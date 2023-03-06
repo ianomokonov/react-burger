@@ -1,0 +1,43 @@
+.main {
+  max-height: calc(100% - var(--offset-base-size) * 74);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--offset-base-size) * 4);
+}
+
+.ingredient {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ingredient > svg {
+  position: absolute;
+  left: 0;
+}
+
+.ingredient__card {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ingredient__card > span {
+  width: 100%;
+}
+
+.order {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.order__sum {
+  display: flex;
+  align-items: center;
+}
+
+.order__sum svg {
+  width: calc(var(--offset-base-size) * 9);
+  height: calc(var(--offset-base-size) * 9);
+}

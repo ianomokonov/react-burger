@@ -1,0 +1,5 @@
+.ingredient-category__items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--offset-base-size) * 8) calc(var(--offset-base-size) * 6);
+}
