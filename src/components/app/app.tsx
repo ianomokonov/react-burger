@@ -4,14 +4,12 @@ import { BurgerContructor } from "../burger-constructor/burger-constructor";
 import styles from "./app.module.css";
 import { FC, useEffect, useState } from "react";
 import { BurgerIngredient } from "../../interfaces/burger-ingredient";
-
-const URL = "https://norma.nomoreparties.space/api/ingredients";
+import { getIngredients } from "../../utils/data-access";
 
 const App: FC = () => {
   const [ingredients, setIngredients] = useState<BurgerIngredient[]>([]);
   useEffect(() => {
-    fetch(URL)
-      .then((response) => response.json())
+    getIngredients()
       .then(({ data }) => setIngredients(data))
       .catch((error) => console.error(error));
   }, []);

@@ -30,7 +30,7 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
   }, [escCloseHandler]);
 
   if (!modalRoot) {
-    return <></>;
+    return null;
   }
   return ReactDOM.createPortal(
     <>
