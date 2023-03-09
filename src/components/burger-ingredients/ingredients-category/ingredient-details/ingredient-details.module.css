@@ -1,0 +1,31 @@
+.ingredient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 calc(var(--offset-base-size) * 15)
+    calc(var(--offset-base-size) * 5);
+}
+
+.ingredient__image {
+  width: 100%;
+  composes: mb-4 from global;
+}
+
+.ingredient__title {
+  text-align: center;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: calc(var(--offset-base-size) * 5);
+  width: 100%;
+  composes: text_color_inactive from global;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--offset-base-size) * 2);
+}

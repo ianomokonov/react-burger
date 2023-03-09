@@ -1,0 +1,24 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+}
+
+.modal__content {
+    position: absolute;
+  width: calc(var(--offset-base-size) * 180);
+  border-radius: calc(var(--offset-base-size) * 10);
+  background: var(--background);
+  left: calc(50vw - var(--offset-base-size) * 90);
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
