@@ -6,62 +6,102 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
-import { FC, useMemo, useState } from "react";
+import { FC, useContext, useMemo, useState } from "react";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "./order-details/order-details";
+import { BurgerContructorContext } from "../../contexts/burger-constructor.context";
+import { IngredientType } from "../../interfaces/ingredient-type";
+import { makeOrder } from "../../utils/data-access";
 
-export const BurgerContructor: FC<BurgerConstructorProps> = ({
-  ingredients,
-  className,
-}) => {
+export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
+  const { ingredients, setOrderNumber } = useContext(BurgerContructorContext);
+  const [bun, mainIngredients] = useMemo(() => {
+    return [
+      ingredients.find((ingredient) => ingredient.type === IngredientType.Bun),
+      ingredients.filter(
+        (ingredient) => ingredient.type !== IngredientType.Bun
+      ),
+    ];
+  }, [ingredients]);
   const totalPrice = useMemo(() => {
     return ingredients.reduce((prev, curr) => prev + curr.price, 0);
   }, [ingredients]);
 
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
 
-  const toggleOrderModal = () => {
-    setIsOrderModalOpened(!isOrderModalOpened);
+  const onMakeOrderClick = async () => {
+    if (!bun) {
+      return;
+    }
+    try {
+      const {
+        order: { number: orderNumber },
+      } = await makeOrder([
+        bun._id,
+        bun._id,
+        ...mainIngredients.map((ingredient) => ingredient._id),
+      ]);
+
+      setOrderNumber(orderNumber);
+      setIsOrderModalOpened(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const closeOrderModal = () => {
+    setIsOrderModalOpened(false);
   };
 
   return (
     <>
       <div className={`pl-4 pb-4 ${className}`}>
-        <div className="pl-8">
-          <ConstructorElement
-            type="top"
-            extraClass="mb-4"
-            isLocked={true}
-            text={ingredients[0].name}
-            price={ingredients[0].price}
-            thumbnail={ingredients[0].image}
-          />
-        </div>
+        {!!ingredients.length && (
+          <>
+            {!!bun && (
+              <div className="pl-8">
+                <ConstructorElement
+                  type="top"
+                  extraClass="mb-4"
+                  isLocked={true}
+                  text={bun.name}
+                  price={bun.price}
+                  thumbnail={bun.image}
+                />
+              </div>
+            )}
 
-        <div className={`${styles.main} custom-scroll`}>
-          {ingredients.slice(1, -2).map((ingredient) => (
-            <div key={ingredient._id} className={`pl-8 ${styles.ingredient}`}>
-              <DragIcon type="primary" />
-              <ConstructorElement
-                extraClass={styles.ingredient__card}
-                text={ingredient.name}
-                price={ingredient.price}
-                thumbnail={ingredient.image}
-              />
+            <div className={`${styles.main} custom-scroll`}>
+              {mainIngredients.map((ingredient) => (
+                <div
+                  key={ingredient._id}
+                  className={`pl-8 ${styles.ingredient}`}
+                >
+                  <DragIcon type="primary" />
+                  <ConstructorElement
+                    extraClass={styles.ingredient__card}
+                    text={ingredient.name}
+                    price={ingredient.price}
+                    thumbnail={ingredient.image}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <div className="pl-8 mb-10">
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            extraClass="mt-4"
-            text={ingredients[ingredients.length - 1].name}
-            price={ingredients[ingredients.length - 1].price}
-            thumbnail={ingredients[ingredients.length - 1].image}
-          />
-        </div>
+            {!!bun && (
+              <div className="pl-8 mb-10">
+                <ConstructorElement
+                  type="bottom"
+                  isLocked={true}
+                  extraClass="mt-4"
+                  text={bun.name}
+                  price={bun.price}
+                  thumbnail={bun.image}
+                />
+              </div>
+            )}
+          </>
+        )}
 
         <div className={styles.order}>
           <div className={`${styles.order__sum} mr-10`}>
@@ -72,14 +112,14 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({
             htmlType="button"
             type="primary"
             size="large"
-            onClick={toggleOrderModal}
+            onClick={onMakeOrderClick}
           >
             Оформить заказ
           </Button>
         </div>
       </div>
       {isOrderModalOpened && (
-        <Modal onClose={toggleOrderModal}>
+        <Modal onClose={closeOrderModal}>
           <OrderDetails />
         </Modal>
       )}
