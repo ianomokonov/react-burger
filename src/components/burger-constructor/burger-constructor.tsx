@@ -14,18 +14,19 @@ import { IngredientType } from "../../interfaces/ingredient-type";
 import { makeOrder } from "../../utils/data-access";
 
 export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
-  const { ingredients, setOrderNumber } = useContext(BurgerContructorContext);
+  const { constructorData, setOrderNumber } = useContext(
+    BurgerContructorContext
+  );
   const [bun, mainIngredients] = useMemo(() => {
     return [
-      ingredients.find((ingredient) => ingredient.type === IngredientType.Bun),
-      ingredients.filter(
+      constructorData.ingredients.find(
+        (ingredient) => ingredient.type === IngredientType.Bun
+      ),
+      constructorData.ingredients.filter(
         (ingredient) => ingredient.type !== IngredientType.Bun
       ),
     ];
-  }, [ingredients]);
-  const totalPrice = useMemo(() => {
-    return ingredients.reduce((prev, curr) => prev + curr.price, 0);
-  }, [ingredients]);
+  }, [constructorData]);
 
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
 
@@ -56,7 +57,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
   return (
     <>
       <div className={`pl-4 pb-4 ${className}`}>
-        {!!ingredients.length && (
+        {!!constructorData.ingredients.length && (
           <>
             {!!bun && (
               <div className="pl-8">
@@ -105,7 +106,9 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
 
         <div className={styles.order}>
           <div className={`${styles.order__sum} mr-10`}>
-            <p className="text text_type_main-large mr-3">{totalPrice}</p>
+            <p className="text text_type_main-large mr-3">
+              {constructorData.totalPrice}
+            </p>
             <CurrencyIcon type="primary" />
           </div>
           <Button

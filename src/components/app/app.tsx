@@ -2,29 +2,32 @@ import { AppHeader } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
 import { BurgerContructor } from "../burger-constructor/burger-constructor";
 import styles from "./app.module.css";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useReducer, useState } from "react";
 import { BurgerIngredient } from "../../interfaces/burger-ingredient";
 import { getIngredients } from "../../utils/data-access";
 import { BurgerContructorContext } from "../../contexts/burger-constructor.context";
-import { IngredientType } from "../../interfaces/ingredient-type";
+import { constructorDataReducer } from "../../reducers/constructor-data/constructor-data.reducer";
+import { ConstructorDataActionType } from "../../reducers/constructor-data/constructor-data.action";
 
 const App: FC = () => {
   const [ingredients, setIngredients] = useState<BurgerIngredient[]>([]);
   const [orderNumber, setOrderNumber] = useState<number | undefined>();
-  const constructorIngredients = useMemo(() => {
-    if (!ingredients.length) {
-      return [];
+  const [constructorData, constructorDataDispatcher] = useReducer(
+    constructorDataReducer,
+    {
+      ingredients: [],
+      totalPrice: 0,
     }
-    return [
-      ingredients.find((ingredient) => ingredient.type === IngredientType.Bun) as BurgerIngredient,
-      ...ingredients.filter(
-        (ingredient) => ingredient.type !== IngredientType.Bun
-      ),
-    ];
-  }, [ingredients]);
+  );
   useEffect(() => {
     getIngredients()
-      .then(({ data }) => setIngredients(data))
+      .then(({ data }) => {
+        setIngredients(data);
+        constructorDataDispatcher({
+          type: ConstructorDataActionType.SetRange,
+          ingredients: data.slice(1, 4),
+        });
+      })
       .catch((error) => console.error(error));
   }, []);
 
@@ -36,7 +39,12 @@ const App: FC = () => {
         {ingredients.length && (
           <div className={styles.content}>
             <BurgerContructorContext.Provider
-              value={{ ingredients: constructorIngredients, orderNumber, setOrderNumber }}
+              value={{
+                constructorData,
+                orderNumber,
+                setOrderNumber,
+                dispatchConstructorData: constructorDataDispatcher,
+              }}
             >
               <BurgerIngredients ingredients={ingredients} />
               <BurgerContructor />
