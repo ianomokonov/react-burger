@@ -15,9 +15,7 @@ const post = <T>(url: string, body: T) => {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    body: JSON.stringify({
-      body,
-    }),
+    body: JSON.stringify(body),
   }).then(checkReponse);
 };
 
@@ -26,5 +24,5 @@ export const getIngredients = (): Promise<IngredientListResponse> => {
 };
 
 export const makeOrder = (ingredients: string[]) => {
-  return post(`${BASE_URL}/orders`, ingredients);
+  return post(`${BASE_URL}/orders`, { ingredients });
 };
