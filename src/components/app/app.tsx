@@ -37,7 +37,7 @@ const App: FC = () => {
       <AppHeader />
       <main className={`container pt-10 pl-5 pr-5`}>
         <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
-        {ingredients.length && (
+        {!!ingredients.length && (
           <div className={styles.content}>
             <BurgerContructorContext.Provider
               value={{
