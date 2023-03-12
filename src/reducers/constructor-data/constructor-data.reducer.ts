@@ -26,7 +26,7 @@ export const constructorDataReducer = (
           return {
             ...state,
             ingredients: [ingredient, ...state.ingredients],
-            totalPrice: totalPrice + ingredient.price,
+            totalPrice: totalPrice + ingredient.price * 2,
           };
         }
 
@@ -40,8 +40,8 @@ export const constructorDataReducer = (
           ],
           totalPrice:
             totalPrice -
-            state.ingredients[currentBunIndex].price +
-            ingredient.price,
+            state.ingredients[currentBunIndex].price * 2 +
+            ingredient.price * 2,
         };
       }
 

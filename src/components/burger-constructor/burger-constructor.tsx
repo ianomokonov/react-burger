@@ -12,11 +12,12 @@ import { OrderDetails } from "./order-details/order-details";
 import { BurgerContructorContext } from "../../contexts/burger-constructor.context";
 import { IngredientType } from "../../interfaces/ingredient-type";
 import { makeOrder } from "../../utils/data-access";
+import { BurgerIngredient } from "../../interfaces/burger-ingredient";
+import { ConstructorDataActionType } from "../../reducers/constructor-data/constructor-data.action";
 
 export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
-  const { constructorData, setOrderNumber } = useContext(
-    BurgerContructorContext
-  );
+  const { constructorData, setOrderNumber, dispatchConstructorData } =
+    useContext(BurgerContructorContext);
   const [bun, mainIngredients] = useMemo(() => {
     return [
       constructorData.ingredients.find(
@@ -54,6 +55,13 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     setIsOrderModalOpened(false);
   };
 
+  const removeIngredient = (ingredient: BurgerIngredient) => {
+    dispatchConstructorData({
+      type: ConstructorDataActionType.Remove,
+      ingredient,
+    });
+  };
+
   return (
     <>
       <div className={`pl-4 pb-4 ${className}`}>
@@ -72,21 +80,32 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
               </div>
             )}
 
-            <div className={`${styles.main} custom-scroll`}>
-              {mainIngredients.map((ingredient) => (
-                <div
-                  key={ingredient._id}
-                  className={`pl-8 ${styles.ingredient}`}
-                >
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    extraClass={styles.ingredient__card}
-                    text={ingredient.name}
-                    price={ingredient.price}
-                    thumbnail={ingredient.image}
-                  />
-                </div>
-              ))}
+            <div
+              className={`${styles.main} custom-scroll ${
+                mainIngredients.length ? "" : styles.main_empty
+              }`}
+            >
+              {mainIngredients.length ? (
+                mainIngredients.map((ingredient, index) => (
+                  <div
+                    key={`${ingredient._id}${index}`}
+                    className={`pl-8 ${styles.ingredient}`}
+                  >
+                    <DragIcon type="primary" />
+                    <ConstructorElement
+                      extraClass={styles.ingredient__card}
+                      text={ingredient.name}
+                      price={ingredient.price}
+                      thumbnail={ingredient.image}
+                      handleClose={() => removeIngredient(ingredient)}
+                    />
+                  </div>
+                ))
+              ) : (
+                <span className="text text_type_main-default text_color_inactive">
+                  Добавьте ингредиенты
+                </span>
+              )}
             </div>
 
             {!!bun && (

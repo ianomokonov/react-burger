@@ -8,6 +8,7 @@ import { getIngredients } from "../../utils/data-access";
 import { BurgerContructorContext } from "../../contexts/burger-constructor.context";
 import { constructorDataReducer } from "../../reducers/constructor-data/constructor-data.reducer";
 import { ConstructorDataActionType } from "../../reducers/constructor-data/constructor-data.action";
+import { IngredientType } from "../../interfaces/ingredient-type";
 
 const App: FC = () => {
   const [ingredients, setIngredients] = useState<BurgerIngredient[]>([]);
@@ -24,8 +25,8 @@ const App: FC = () => {
       .then(({ data }) => {
         setIngredients(data);
         constructorDataDispatcher({
-          type: ConstructorDataActionType.SetRange,
-          ingredients: data.slice(1, 4),
+          type: ConstructorDataActionType.Add,
+          ingredient: data.find((d) => d.type === IngredientType.Bun),
         });
       })
       .catch((error) => console.error(error));
