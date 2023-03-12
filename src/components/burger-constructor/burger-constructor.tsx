@@ -73,7 +73,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
                   type="top"
                   extraClass="mb-4"
                   isLocked={true}
-                  text={bun.name}
+                  text={`${bun.name} (верх)`}
                   price={bun.price}
                   thumbnail={bun.image}
                 />
@@ -114,7 +114,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
                   type="bottom"
                   isLocked={true}
                   extraClass="mt-4"
-                  text={bun.name}
+                  text={`${bun.name} (низ)`}
                   price={bun.price}
                   thumbnail={bun.image}
                 />
