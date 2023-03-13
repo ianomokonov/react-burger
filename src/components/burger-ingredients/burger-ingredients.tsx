@@ -9,6 +9,9 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   className,
   ingredients,
 }) => {
+  // const { bun, ingredients } = useTypedSelector(
+  //   (state) => state.constructorData
+  // );
   const [currentIngredient, setCurrentIngredient] = useState(
     IngredientType.Bun as string
   );

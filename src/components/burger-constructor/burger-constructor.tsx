@@ -6,30 +6,33 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
-import { FC, useContext, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "./order-details/order-details";
-import { BurgerContructorContext } from "../../contexts/burger-constructor.context";
-import { IngredientType } from "../../interfaces/ingredient-type";
 import { makeOrder } from "../../utils/data-access";
-import { BurgerIngredient } from "../../interfaces/burger-ingredient";
-import { ConstructorDataActionType } from "../../reducers/constructor-data/constructor-data.action";
+import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
+import {
+  removeIngredient,
+  setOrderNumber,
+} from "../../redux/constructor/constructor.slice";
+import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
 
 export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
-  const { constructorData, setOrderNumber, dispatchConstructorData } =
-    useContext(BurgerContructorContext);
-  const [bun, mainIngredients] = useMemo(() => {
-    return [
-      constructorData.ingredients.find(
-        (ingredient) => ingredient.type === IngredientType.Bun
-      ),
-      constructorData.ingredients.filter(
-        (ingredient) => ingredient.type !== IngredientType.Bun
-      ),
-    ];
-  }, [constructorData]);
+  const { bun, ingredients } = useTypedSelector(
+    (state) => state.constructorData
+  );
+
+  const dispatch = useTypedDispatch();
 
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
+
+  const totalPrice = useMemo(() => {
+    const bunsPrice = bun ? bun.price * 2 : 0;
+    return (
+      ingredients?.reduce((prev, cur) => prev + cur.price, bunsPrice) ||
+      bunsPrice
+    );
+  }, [bun, ingredients]);
 
   const onMakeOrderClick = async () => {
     if (!bun) {
@@ -41,10 +44,10 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
       } = await makeOrder([
         bun._id,
         bun._id,
-        ...mainIngredients.map((ingredient) => ingredient._id),
+        ...ingredients.map((ingredient) => ingredient._id),
       ]);
 
-      setOrderNumber(orderNumber);
+      dispatch(setOrderNumber(orderNumber));
       setIsOrderModalOpened(true);
     } catch (error) {
       console.error(error);
@@ -55,79 +58,96 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     setIsOrderModalOpened(false);
   };
 
-  const removeIngredient = (ingredient: BurgerIngredient) => {
-    dispatchConstructorData({
-      type: ConstructorDataActionType.Remove,
-      ingredient,
-    });
+  const onRemoveIngredient = (ingredient: ConstructorIngredient) => {
+    dispatch(removeIngredient(ingredient));
   };
 
   return (
     <>
       <div className={`pl-4 pb-4 ${className}`}>
-        {!!constructorData.ingredients.length && (
-          <>
-            {!!bun && (
-              <div className="pl-8">
-                <ConstructorElement
-                  type="top"
-                  extraClass="mb-4"
-                  isLocked={true}
-                  text={`${bun.name} (верх)`}
-                  price={bun.price}
-                  thumbnail={bun.image}
-                />
-              </div>
-            )}
-
+        {!!bun ? (
+          <div className="pl-8">
+            <ConstructorElement
+              type="top"
+              extraClass="mb-4"
+              isLocked={true}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+        ) : (
+          <div className="pl-8">
             <div
-              className={`${styles.main} custom-scroll ${
-                mainIngredients.length ? "" : styles.main_empty
-              }`}
+              className="constructor-element constructor-element_pos_top mb-4"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              {mainIngredients.length ? (
-                mainIngredients.map((ingredient, index) => (
-                  <div
-                    key={`${ingredient._id}${index}`}
-                    className={`pl-8 ${styles.ingredient}`}
-                  >
-                    <DragIcon type="primary" />
-                    <ConstructorElement
-                      extraClass={styles.ingredient__card}
-                      text={ingredient.name}
-                      price={ingredient.price}
-                      thumbnail={ingredient.image}
-                      handleClose={() => removeIngredient(ingredient)}
-                    />
-                  </div>
-                ))
-              ) : (
-                <span className="text text_type_main-default text_color_inactive">
-                  Добавьте ингредиенты
-                </span>
-              )}
+              <span>Выберите булку</span>
             </div>
+          </div>
+        )}
 
-            {!!bun && (
-              <div className="pl-8 mb-10">
+        <div
+          className={`${styles.main} custom-scroll ${
+            ingredients.length ? "" : styles.main_empty
+          }`}
+        >
+          {ingredients.length ? (
+            ingredients.map((ingredient, index) => (
+              <div
+                key={`${ingredient._id}${index}`}
+                className={`pl-8 ${styles.ingredient}`}
+              >
+                <DragIcon type="primary" />
                 <ConstructorElement
-                  type="bottom"
-                  isLocked={true}
-                  extraClass="mt-4"
-                  text={`${bun.name} (низ)`}
-                  price={bun.price}
-                  thumbnail={bun.image}
+                  extraClass={styles.ingredient__card}
+                  text={ingredient.name}
+                  price={ingredient.price}
+                  thumbnail={ingredient.image}
+                  handleClose={() => onRemoveIngredient(ingredient)}
                 />
               </div>
-            )}
-          </>
+            ))
+          ) : (
+            <span className="text text_type_main-default text_color_inactive">
+              Добавьте ингредиенты
+            </span>
+          )}
+        </div>
+
+        {!!bun ? (
+          <div className="pl-8 mb-10">
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              extraClass="mt-4"
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+        ) : (
+          <div className="pl-8 mb-10">
+            <div
+              className="constructor-element constructor-element_pos_bottom mt-4"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <span>Выберите булку</span>
+            </div>
+          </div>
         )}
 
         <div className={styles.order}>
           <div className={`${styles.order__sum} mr-10`}>
-            <p className="text text_type_main-large mr-3">
-              {constructorData.totalPrice}
-            </p>
+            <p className="text text_type_main-large mr-3">{totalPrice}</p>
             <CurrencyIcon type="primary" />
           </div>
           <Button
