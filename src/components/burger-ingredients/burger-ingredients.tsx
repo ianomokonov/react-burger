@@ -1,17 +1,15 @@
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useCallback, useMemo, useState } from "react";
 import { IngredientType } from "../../interfaces/ingredient-type";
+import { useTypedSelector } from "../../redux/hooks";
 import styles from "./burger-ingredients.module.css";
 import { BurgerIngredientsProps } from "./burger-ingredients.props";
 import { IngredientsCategory } from "./ingredients-category/ingredients-category";
 
 export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   className,
-  ingredients,
 }) => {
-  // const { bun, ingredients } = useTypedSelector(
-  //   (state) => state.constructorData
-  // );
+  const { ingredients } = useTypedSelector((state) => state.ingredients);
   const [currentIngredient, setCurrentIngredient] = useState(
     IngredientType.Bun as string
   );

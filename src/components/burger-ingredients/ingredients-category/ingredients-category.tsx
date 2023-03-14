@@ -6,12 +6,6 @@ import { BurgerIngredient } from "../../../interfaces/burger-ingredient";
 import { useState } from "react";
 import { IngredientDetails } from "./ingredient-details/ingredient-details";
 import { FC } from "react";
-import { useTypedDispatch } from "../../../redux/hooks";
-import {
-  addIngredient,
-  setBun,
-} from "../../../redux/constructor/constructor.slice";
-import { IngredientType } from "../../../interfaces/ingredient-type";
 
 export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
   className,
@@ -21,17 +15,9 @@ export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
   const [activeIngredient, setActiveIngredient] = useState<
     BurgerIngredient | undefined
   >();
-  const dispatch = useTypedDispatch();
 
   const toggleDelailsModal = (ingredient?: BurgerIngredient) => {
-    if (ingredient) {
-      dispatch(
-        ingredient.type === IngredientType.Bun
-          ? setBun(ingredient)
-          : addIngredient(ingredient)
-      );
-    }
-    // setActiveIngredient(ingredient);
+    setActiveIngredient(ingredient);
   };
 
   return (

@@ -11,20 +11,77 @@ import { Modal } from "../modal/modal";
 import { OrderDetails } from "./order-details/order-details";
 import { makeOrder } from "../../utils/data-access";
 import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
+import { useDrop } from "react-dnd";
 import {
+  addIngredient,
   removeIngredient,
+  setBun,
   setOrderNumber,
 } from "../../redux/constructor/constructor.slice";
 import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
+import { IngredientType } from "../../interfaces/ingredient-type";
 
 export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
-  const { bun, ingredients } = useTypedSelector(
-    (state) => state.constructorData
-  );
+  const { bun, ingredients, allIngredients } = useTypedSelector((state) => ({
+    bun: state.constructorData.bun,
+    ingredients: state.constructorData.ingredients,
+    allIngredients: state.ingredients.ingredients,
+  }));
 
   const dispatch = useTypedDispatch();
 
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
+
+  const [{ isTopBunHovered }, topBunDropRef] = useDrop(() => ({
+    accept: IngredientType.Bun,
+    drop: (item: { id: string }) => {
+      const stateIngredient = allIngredients.find(
+        (ingredient) => ingredient._id === item.id
+      );
+      if (!stateIngredient) {
+        return;
+      }
+
+      dispatch(setBun(stateIngredient));
+    },
+    collect: (monitor) => ({
+      isTopBunHovered: monitor.isOver(),
+    }),
+  }));
+
+  const [{ isBottomBunHovered }, bottomBunDropRef] = useDrop(() => ({
+    accept: IngredientType.Bun,
+    drop: (item: { id: string }) => {
+      const stateIngredient = allIngredients.find(
+        (ingredient) => ingredient._id === item.id
+      );
+      if (!stateIngredient) {
+        return;
+      }
+
+      dispatch(setBun(stateIngredient));
+    },
+    collect: (monitor) => ({
+      isBottomBunHovered: monitor.isOver(),
+    }),
+  }));
+
+  const [{ isItemsHovered }, itemsDropRef] = useDrop(() => ({
+    accept: IngredientType.Main,
+    drop: (item: { id: string }) => {
+      const stateIngredient = allIngredients.find(
+        (ingredient) => ingredient._id === item.id
+      );
+      if (!stateIngredient) {
+        return;
+      }
+
+      dispatch(addIngredient(stateIngredient));
+    },
+    collect: (monitor) => ({
+      isItemsHovered: monitor.isOver(),
+    }),
+  }));
 
   const totalPrice = useMemo(() => {
     const bunsPrice = bun ? bun.price * 2 : 0;
@@ -66,7 +123,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     <>
       <div className={`pl-4 pb-4 ${className}`}>
         {!!bun ? (
-          <div className="pl-8">
+          <div className="pl-8" ref={topBunDropRef}>
             <ConstructorElement
               type="top"
               extraClass="mb-4"
@@ -79,11 +136,18 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
         ) : (
           <div className="pl-8">
             <div
+              ref={topBunDropRef}
               className="constructor-element constructor-element_pos_top mb-4"
               style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                borderWidth: "2px",
+                borderStyle: "dashed",
+                borderColor:
+                  isTopBunHovered || isBottomBunHovered
+                    ? "var(--colors-interface-accent)"
+                    : "transparent",
               }}
             >
               <span>Выберите булку</span>
@@ -92,6 +156,15 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
         )}
 
         <div
+          ref={itemsDropRef}
+          style={{
+            borderWidth: "2px",
+            borderStyle: "dashed",
+            borderColor:
+              isItemsHovered && !ingredients.length
+                ? "var(--colors-interface-accent)"
+                : "transparent",
+          }}
           className={`${styles.main} custom-scroll ${
             ingredients.length ? "" : styles.main_empty
           }`}
@@ -120,7 +193,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
         </div>
 
         {!!bun ? (
-          <div className="pl-8 mb-10">
+          <div className="pl-8 mb-10" ref={bottomBunDropRef}>
             <ConstructorElement
               type="bottom"
               isLocked={true}
@@ -133,11 +206,18 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
         ) : (
           <div className="pl-8 mb-10">
             <div
+              ref={bottomBunDropRef}
               className="constructor-element constructor-element_pos_bottom mt-4"
               style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                borderWidth: "2px",
+                borderStyle: "dashed",
+                borderColor:
+                  isTopBunHovered || isBottomBunHovered
+                    ? "var(--colors-interface-accent)"
+                    : "transparent",
               }}
             >
               <span>Выберите булку</span>

@@ -1,10 +1,10 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import styles from "./order-details.module.css";
 import DoneImg from "../../../images/done.svg";
-import { BurgerContructorContext } from "../../../contexts/burger-constructor.context";
+import { useTypedSelector } from "../../../redux/hooks";
 
 export const OrderDetails: FC = () => {
-  const { orderNumber } = useContext(BurgerContructorContext);
+  const { orderNumber } = useTypedSelector((store) => store.constructorData);
   return (
     <div className={styles.order}>
       <p className={`${styles.order__number} text text_type_digits-large mb-8`}>
