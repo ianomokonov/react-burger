@@ -8,6 +8,7 @@ export interface ConstructorState {
 }
 
 export interface UpdateOrderAction {
-  currOrder: number;
-  nextOrder: number;
+  currIndex: number;
+  nextIndex: number;
+  id: string;
 }

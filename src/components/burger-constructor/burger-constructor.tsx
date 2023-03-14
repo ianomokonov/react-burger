@@ -2,11 +2,10 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "./order-details/order-details";
 import { makeOrder } from "../../utils/data-access";
@@ -20,6 +19,7 @@ import {
 } from "../../redux/constructor/constructor.slice";
 import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
 import { IngredientType } from "../../interfaces/ingredient-type";
+import { DragIngredient } from "./drag-ingredient/drag-ingredient";
 
 export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
   const { bun, ingredients, allIngredients } = useTypedSelector((state) => ({
@@ -115,9 +115,26 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     setIsOrderModalOpened(false);
   };
 
-  const onRemoveIngredient = (ingredient: ConstructorIngredient) => {
-    dispatch(removeIngredient(ingredient));
-  };
+  const onRemoveIngredient = useCallback(
+    (ingredient: ConstructorIngredient) => {
+      dispatch(removeIngredient(ingredient));
+    },
+    [dispatch]
+  );
+
+  const getDragIngredient = useCallback(
+    (ingredient: ConstructorIngredient, index: number) => (
+      <DragIngredient
+        key={ingredient.uniqueId}
+        index={index}
+        ingredient={ingredient}
+        onRemoveIngredient={onRemoveIngredient}
+        className={`pl-8 ${styles.ingredient}`}
+        extraClass={styles.ingredient__card}
+      />
+    ),
+    [onRemoveIngredient]
+  );
 
   return (
     <>
@@ -170,21 +187,9 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
           }`}
         >
           {ingredients.length ? (
-            ingredients.map((ingredient, index) => (
-              <div
-                key={`${ingredient._id}${index}`}
-                className={`pl-8 ${styles.ingredient}`}
-              >
-                <DragIcon type="primary" />
-                <ConstructorElement
-                  extraClass={styles.ingredient__card}
-                  text={ingredient.name}
-                  price={ingredient.price}
-                  thumbnail={ingredient.image}
-                  handleClose={() => onRemoveIngredient(ingredient)}
-                />
-              </div>
-            ))
+            ingredients.map((ingredient, index) =>
+              getDragIngredient(ingredient, index)
+            )
           ) : (
             <span className="text text_type_main-default text_color_inactive">
               Добавьте ингредиенты
