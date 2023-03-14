@@ -16,8 +16,6 @@ export const DragIngredient: FC<DragIngredientProps> = ({
   index,
   onRemoveIngredient,
 }) => {
-  console.log(ingredient.name, index);
-
   const dispatch = useTypedDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const [{ isDragging }, dragRef] = useDrag({
@@ -38,7 +36,6 @@ export const DragIngredient: FC<DragIngredientProps> = ({
       }
       const dragIndex = item.index;
       const hoverIndex = index;
-      console.log(dragIndex, [hoverIndex, ingredient.name]);
 
       // Don't replace items with themselves
       if (dragIndex === hoverIndex) {

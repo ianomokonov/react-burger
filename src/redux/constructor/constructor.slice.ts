@@ -39,16 +39,7 @@ export const constructorSlice = createSlice({
       // удаляем со старого места
       state.ingredients.splice(action.payload.currIndex, 1);
       // вставляем в новое
-      state.ingredients.splice(
-        action.payload.nextIndex,
-        0,
-        prevIngredients[currIndex]
-      );
-      console.log(
-        JSON.parse(JSON.stringify(prevIngredients)),
-        `${currIndex} -> ${nextIndex}`,
-        JSON.parse(JSON.stringify(state.ingredients))
-      );
+      state.ingredients.splice(nextIndex, 0, prevIngredients[currIndex]);
     },
   },
 });
