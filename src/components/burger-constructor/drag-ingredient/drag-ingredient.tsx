@@ -2,7 +2,7 @@ import {
   ConstructorElement,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { FC, useRef } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { DragIngredientProps } from "./drag-ingredient.props";
 import { useDrag, useDrop } from "react-dnd";
 import type { XYCoord } from "dnd-core";
@@ -15,9 +15,13 @@ export const DragIngredient: FC<DragIngredientProps> = ({
   extraClass,
   index,
   onRemoveIngredient,
+  onAddIngredient,
 }) => {
   const dispatch = useTypedDispatch();
   const ref = useRef<HTMLDivElement>(null);
+  const [sortItemPosition, setSortItemPosition] = useState<
+    null | "top" | "bottom"
+  >(null);
   const [{ isDragging }, dragRef] = useDrag({
     type: "ingredient",
     item: { id: ingredient.uniqueId, index },
@@ -25,11 +29,27 @@ export const DragIngredient: FC<DragIngredientProps> = ({
       isDragging: monitor.isDragging(),
     }),
   });
-  const [{ handlerId }, dropRef] = useDrop({
-    accept: "ingredient",
+
+  const [{ handlerId, isOver }, dropRef] = useDrop({
+    accept: ["ingredient", "main"],
     collect: (monitor) => ({
       handlerId: monitor.getHandlerId(),
+      isOver: monitor.isOver(),
     }),
+    drop(item: any) {
+      if (item.index || item.index === 0) {
+        dispatch(
+          updateOrder({
+            id: item.id,
+            currIndex: item.index,
+            nextIndex: index,
+          })
+        );
+        return;
+      }
+
+      onAddIngredient(item.id, index);
+    },
     hover(item: any, monitor) {
       if (!ref.current) {
         return;
@@ -37,60 +57,55 @@ export const DragIngredient: FC<DragIngredientProps> = ({
       const dragIndex = item.index;
       const hoverIndex = index;
 
-      // Don't replace items with themselves
       if (dragIndex === hoverIndex) {
         return;
       }
 
-      // Determine rectangle on screen
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
 
-      // Get vertical middle
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
-      // Determine mouse position
       const clientOffset = monitor.getClientOffset();
 
-      // Get pixels to the top
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
 
-      // Dragging downwards
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      const itemPosition = hoverClientY > hoverMiddleY ? "bottom" : "top";
+
+      if (itemPosition === sortItemPosition) {
         return;
       }
 
-      // Dragging upwards
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-
-      // Time to actually perform the action
-      dispatch(
-        updateOrder({
-          currIndex: dragIndex,
-          nextIndex: hoverIndex,
-          id: item.id,
-        })
-      );
-
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
-      item.index = hoverIndex;
+      setSortItemPosition(hoverClientY > hoverMiddleY ? "bottom" : "top");
     },
   });
+
+  useEffect(() => {
+    if (!isOver) {
+      setSortItemPosition(null);
+    }
+  }, [isOver]);
+
+  const sortPositionClass = useMemo(() => {
+    if (!isOver || !sortItemPosition) {
+      return "";
+    }
+
+    if (sortItemPosition === "top") {
+      return "pt-24";
+    }
+
+    return "pb-24";
+  }, [isOver, sortItemPosition]);
   const opacity = isDragging ? 0 : 1;
+
   dragRef(dropRef(ref));
+
   return (
     <div
       ref={ref}
-      style={{ opacity }}
-      className={className}
+      style={{ opacity, display: isDragging ? "none" : "flex" }}
+      className={`${className} ${sortPositionClass}`}
       data-handler-id={handlerId}
     >
       <DragIcon type="primary" />

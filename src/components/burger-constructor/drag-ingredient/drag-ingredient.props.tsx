@@ -6,4 +6,5 @@ export interface DragIngredientProps {
   extraClass?: string;
   index: number;
   onRemoveIngredient: (ingredient: ConstructorIngredient) => void;
+  onAddIngredient: (id: string, index?: number) => void;
 }

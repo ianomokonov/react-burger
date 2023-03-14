@@ -32,7 +32,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
 
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
 
-  const [{ isTopBunHovered }, topBunDropRef] = useDrop(() => ({
+  const [{ isTopBunHovered }, topBunDropRef] = useDrop({
     accept: IngredientType.Bun,
     drop: (item: { id: string }) => {
       const stateIngredient = allIngredients.find(
@@ -47,9 +47,9 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     collect: (monitor) => ({
       isTopBunHovered: monitor.isOver(),
     }),
-  }));
+  });
 
-  const [{ isBottomBunHovered }, bottomBunDropRef] = useDrop(() => ({
+  const [{ isBottomBunHovered }, bottomBunDropRef] = useDrop({
     accept: IngredientType.Bun,
     drop: (item: { id: string }) => {
       const stateIngredient = allIngredients.find(
@@ -64,24 +64,20 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     collect: (monitor) => ({
       isBottomBunHovered: monitor.isOver(),
     }),
-  }));
+  });
 
-  const [{ isItemsHovered }, itemsDropRef] = useDrop(() => ({
+  const [{ isItemsHovered }, itemsDropRef] = useDrop({
     accept: IngredientType.Main,
-    drop: (item: { id: string }) => {
-      const stateIngredient = allIngredients.find(
-        (ingredient) => ingredient._id === item.id
-      );
-      if (!stateIngredient) {
+    drop: (item: { id: string }, monitor) => {
+      if (monitor.didDrop()) {
         return;
       }
-
-      dispatch(addIngredient(stateIngredient));
+      onAddIngredient(item.id);
     },
     collect: (monitor) => ({
       isItemsHovered: monitor.isOver(),
     }),
-  }));
+  });
 
   const totalPrice = useMemo(() => {
     const bunsPrice = bun ? bun.price * 2 : 0;
@@ -90,6 +86,20 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
       bunsPrice
     );
   }, [bun, ingredients]);
+
+  const onAddIngredient = useCallback(
+    (id: string, index?: number) => {
+      const stateIngredient = allIngredients.find(
+        (ingredient) => ingredient._id === id
+      );
+      if (!stateIngredient) {
+        return;
+      }
+
+      dispatch(addIngredient({ ingredient: stateIngredient, index }));
+    },
+    [allIngredients, dispatch]
+  );
 
   const onMakeOrderClick = async () => {
     if (!bun) {
@@ -129,11 +139,12 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
         index={index}
         ingredient={ingredient}
         onRemoveIngredient={onRemoveIngredient}
+        onAddIngredient={onAddIngredient}
         className={`pl-8 ${styles.ingredient}`}
         extraClass={styles.ingredient__card}
       />
     ),
-    [onRemoveIngredient]
+    [onRemoveIngredient, onAddIngredient]
   );
 
   return (

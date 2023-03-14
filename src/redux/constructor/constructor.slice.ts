@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BurgerIngredient } from "../../interfaces/burger-ingredient";
-import { ConstructorState, UpdateOrderAction } from "./models";
+import {
+  AddIngredientAction,
+  ConstructorState,
+  UpdateOrderAction,
+} from "./models";
 import { v4 as uuidv4 } from "uuid";
 import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
 import { IngredientType } from "../../interfaces/ingredient-type";
@@ -20,11 +24,17 @@ export const constructorSlice = createSlice({
     setOrderNumber: (state, action: PayloadAction<number>) => {
       state.orderNumber = action.payload;
     },
-    addIngredient: (state, action: PayloadAction<BurgerIngredient>) => {
-      state.ingredients.push({
-        ...action.payload,
+    addIngredient: (state, action: PayloadAction<AddIngredientAction>) => {
+      const newIngredient = {
+        ...action.payload.ingredient,
         uniqueId: uuidv4(),
-      });
+      };
+
+      if (action.payload.index || action.payload.index === 0) {
+        state.ingredients.splice(action.payload.index, 0, newIngredient);
+        return;
+      }
+      state.ingredients.push(newIngredient);
     },
     removeIngredient: (state, action: PayloadAction<ConstructorIngredient>) => {
       state.ingredients = state.ingredients.filter(

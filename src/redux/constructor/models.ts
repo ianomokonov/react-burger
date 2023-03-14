@@ -12,3 +12,8 @@ export interface UpdateOrderAction {
   nextIndex: number;
   id: string;
 }
+
+export interface AddIngredientAction {
+  ingredient: BurgerIngredient;
+  index?: number;
+}
