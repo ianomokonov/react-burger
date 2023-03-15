@@ -8,18 +8,17 @@ import styles from "./burger-constructor.module.css";
 import { FC, useCallback, useMemo, useState } from "react";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "./order-details/order-details";
-import { makeOrder } from "../../utils/data-access";
 import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
 import { useDrop } from "react-dnd";
 import {
   addIngredient,
   removeIngredient,
   setBun,
-  setOrderNumber,
 } from "../../redux/constructor/constructor.slice";
 import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
 import { IngredientType } from "../../interfaces/ingredient-type";
 import { DragIngredient } from "./drag-ingredient/drag-ingredient";
+import { makeOrderThunk } from "../../redux/constructor/thunks";
 
 export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
   const { bun, ingredients, allIngredients } = useTypedSelector((state) => ({
@@ -105,20 +104,14 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     if (!bun) {
       return;
     }
-    try {
-      const {
-        order: { number: orderNumber },
-      } = await makeOrder([
+    await dispatch(
+      makeOrderThunk([
         bun._id,
         bun._id,
         ...ingredients.map((ingredient) => ingredient._id),
-      ]);
-
-      dispatch(setOrderNumber(orderNumber));
-      setIsOrderModalOpened(true);
-    } catch (error) {
-      console.error(error);
-    }
+      ])
+    );
+    setIsOrderModalOpened(true);
   };
 
   const closeOrderModal = () => {

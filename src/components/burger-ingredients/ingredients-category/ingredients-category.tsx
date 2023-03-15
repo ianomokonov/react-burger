@@ -3,15 +3,13 @@ import styles from "./ingredients-category.module.css";
 import { IngredientCard } from "./ingrdient-card/ingredient-card";
 import { Modal } from "../../modal/modal";
 import { BurgerIngredient } from "../../../interfaces/burger-ingredient";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { IngredientDetails } from "./ingredient-details/ingredient-details";
-import { FC } from "react";
 
-export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
-  className,
-  ingredients,
-  name,
-}) => {
+export const IngredientsCategory = forwardRef<
+  HTMLDivElement,
+  IngredientsCategoryProps
+>(({ className, ingredients, name }, ref) => {
   const [activeIngredient, setActiveIngredient] = useState<
     BurgerIngredient | undefined
   >();
@@ -22,7 +20,7 @@ export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
 
   return (
     <>
-      <div className={className}>
+      <div className={className} ref={ref}>
         <h3 className="text text_type_main-medium">{name}</h3>
         <div
           className={`${styles["ingredient-category__items"]} pt-6 pl-4 pr-4`}
@@ -43,4 +41,4 @@ export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
       )}
     </>
   );
-};
+});

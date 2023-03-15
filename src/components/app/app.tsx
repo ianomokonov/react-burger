@@ -6,7 +6,7 @@ import { FC, useEffect } from "react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
-import { getIngredientsThank } from "../../redux/ingredients/thanks";
+import { getIngredientsThank } from "../../redux/ingredients/thunks";
 
 const App: FC = () => {
   const { ingredients } = useTypedSelector((store) => store.ingredients);
