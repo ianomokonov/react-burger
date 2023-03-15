@@ -8,3 +8,10 @@
 .content > div {
   height: calc(100vh - var(--offset-base-size) * 49);
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - var(--offset-base-size) * 24);
+}

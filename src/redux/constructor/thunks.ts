@@ -1,15 +1,17 @@
 import { makeOrder } from "../../utils/data-access";
 import { DispatchType } from "../store";
-import { setOrderNumber } from "./constructor.slice";
+import { orderNumberError, orderNumberRequest, orderNumberSuccess } from "./constructor.slice";
 
 export const makeOrderThunk = (ingredients: string[]) => {
   return async (dispatch: DispatchType) => {
+    dispatch(orderNumberRequest());
     try {
       const {
         order: { number: orderNumber },
       } = await makeOrder(ingredients);
-      dispatch(setOrderNumber(orderNumber));
+      dispatch(orderNumberSuccess(orderNumber));
     } catch (error) {
+      dispatch(orderNumberError());
       console.error(error);
     }
   };

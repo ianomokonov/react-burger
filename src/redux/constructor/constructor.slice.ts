@@ -9,7 +9,11 @@ import { v4 as uuidv4 } from "uuid";
 import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
 import { IngredientType } from "../../interfaces/ingredient-type";
 
-const initialState: ConstructorState = { ingredients: [] };
+const initialState: ConstructorState = {
+  ingredients: [],
+  orderNumberRequest: false,
+  orderNumberError: false,
+};
 
 export const constructorSlice = createSlice({
   name: "constructor",
@@ -21,8 +25,19 @@ export const constructorSlice = createSlice({
       }
       state.bun = action.payload;
     },
-    setOrderNumber: (state, action: PayloadAction<number>) => {
+    orderNumberRequest: (state) => {
+      state.orderNumberRequest = true;
+      state.orderNumberError = false;
+    },
+    orderNumberSuccess: (state, action: PayloadAction<number | undefined>) => {
       state.orderNumber = action.payload;
+      state.orderNumberRequest = false;
+      state.orderNumberError = false;
+    },
+    orderNumberError: (state) => {
+      state.orderNumberRequest = false;
+      state.orderNumberError = true;
+      state.orderNumber = undefined;
     },
     addIngredient: (state, action: PayloadAction<AddIngredientAction>) => {
       const newIngredient = {
@@ -59,7 +74,9 @@ export const {
   removeIngredient,
   updateOrder,
   setBun,
-  setOrderNumber,
+  orderNumberRequest,
+  orderNumberSuccess,
+  orderNumberError,
 } = constructorSlice.actions;
 
 export const constructorReducer = constructorSlice.reducer;
