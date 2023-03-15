@@ -3,20 +3,34 @@ import styles from "./ingredients-category.module.css";
 import { IngredientCard } from "./ingrdient-card/ingredient-card";
 import { Modal } from "../../modal/modal";
 import { BurgerIngredient } from "../../../interfaces/burger-ingredient";
-import { forwardRef, useState } from "react";
+import { forwardRef, useCallback } from "react";
 import { IngredientDetails } from "./ingredient-details/ingredient-details";
+import { useTypedDispatch, useTypedSelector } from "../../../redux/hooks";
+import { getIngredientDetails } from "../../../redux/selectors";
+import {
+  closeIngredientDetailsModal,
+  openIngredientDetailsModal,
+} from "../../../redux/ingredient-details/ingredient-details.slice";
 
 export const IngredientsCategory = forwardRef<
   HTMLDivElement,
   IngredientsCategoryProps
 >(({ className, ingredients, name }, ref) => {
-  const [activeIngredient, setActiveIngredient] = useState<
-    BurgerIngredient | undefined
-  >();
+  const dispatch = useTypedDispatch();
 
-  const toggleDelailsModal = (ingredient?: BurgerIngredient) => {
-    setActiveIngredient(ingredient);
-  };
+  const { ingredient: activeIngredient } =
+    useTypedSelector(getIngredientDetails);
+
+  const toggleDelailsModal = useCallback(
+    (ingredient?: BurgerIngredient) => {
+      if (ingredient) {
+        dispatch(openIngredientDetailsModal(ingredient));
+        return;
+      }
+      dispatch(closeIngredientDetailsModal());
+    },
+    [dispatch]
+  );
 
   return (
     <>
@@ -36,7 +50,7 @@ export const IngredientsCategory = forwardRef<
       </div>
       {activeIngredient && (
         <Modal title="Детали ингредиента" onClose={() => toggleDelailsModal()}>
-          <IngredientDetails ingredient={activeIngredient} />
+          <IngredientDetails />
         </Modal>
       )}
     </>

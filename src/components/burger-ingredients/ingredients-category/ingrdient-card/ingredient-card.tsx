@@ -8,6 +8,7 @@ import { FC, useMemo } from "react";
 import { useDrag } from "react-dnd";
 import { IngredientType } from "../../../../interfaces/ingredient-type";
 import { useTypedSelector } from "../../../../redux/hooks";
+import { getConstructorData } from "../../../../redux/selectors";
 
 export const IngredientCard: FC<IngredientCardProps> = ({
   price,
@@ -17,9 +18,7 @@ export const IngredientCard: FC<IngredientCardProps> = ({
   _id,
   onClick,
 }) => {
-  const { ingredients, bun } = useTypedSelector(
-    (store) => store.constructorData
-  );
+  const { ingredients, bun } = useTypedSelector(getConstructorData);
 
   const selectedCount = useMemo(() => {
     if (type === IngredientType.Bun) {

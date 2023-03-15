@@ -8,11 +8,10 @@ import { DndProvider } from "react-dnd";
 import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
 import { getIngredientsThank } from "../../redux/ingredients/thunks";
 import { Loader } from "../loader/loader";
+import { getIngredients } from "../../redux/selectors";
 
 const App: FC = () => {
-  const { ingredients, isLoading } = useTypedSelector(
-    (store) => store.ingredients
-  );
+  const { ingredients, isLoading } = useTypedSelector(getIngredients);
 
   const dispatch = useTypedDispatch();
   useEffect(() => {

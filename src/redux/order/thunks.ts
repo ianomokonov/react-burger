@@ -1,6 +1,10 @@
 import { makeOrder } from "../../utils/data-access";
 import { DispatchType } from "../store";
-import { orderNumberError, orderNumberRequest, orderNumberSuccess } from "./constructor.slice";
+import {
+  orderNumberError,
+  orderNumberRequest,
+  orderNumberSuccess,
+} from "./order.slice";
 
 export const makeOrderThunk = (ingredients: string[]) => {
   return async (dispatch: DispatchType) => {

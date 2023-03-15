@@ -4,9 +4,6 @@ import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
 export interface ConstructorState {
   ingredients: ConstructorIngredient[];
   bun?: BurgerIngredient;
-  orderNumber?: number;
-  orderNumberRequest: boolean;
-  orderNumberError: boolean;
 }
 
 export interface UpdateOrderAction {

@@ -11,8 +11,6 @@ import { IngredientType } from "../../interfaces/ingredient-type";
 
 const initialState: ConstructorState = {
   ingredients: [],
-  orderNumberRequest: false,
-  orderNumberError: false,
 };
 
 export const constructorSlice = createSlice({
@@ -24,20 +22,6 @@ export const constructorSlice = createSlice({
         return;
       }
       state.bun = action.payload;
-    },
-    orderNumberRequest: (state) => {
-      state.orderNumberRequest = true;
-      state.orderNumberError = false;
-    },
-    orderNumberSuccess: (state, action: PayloadAction<number | undefined>) => {
-      state.orderNumber = action.payload;
-      state.orderNumberRequest = false;
-      state.orderNumberError = false;
-    },
-    orderNumberError: (state) => {
-      state.orderNumberRequest = false;
-      state.orderNumberError = true;
-      state.orderNumber = undefined;
     },
     addIngredient: (state, action: PayloadAction<AddIngredientAction>) => {
       const newIngredient = {
@@ -69,14 +53,7 @@ export const constructorSlice = createSlice({
   },
 });
 
-export const {
-  addIngredient,
-  removeIngredient,
-  updateOrder,
-  setBun,
-  orderNumberRequest,
-  orderNumberSuccess,
-  orderNumberError,
-} = constructorSlice.actions;
+export const { addIngredient, removeIngredient, updateOrder, setBun } =
+  constructorSlice.actions;
 
 export const constructorReducer = constructorSlice.reducer;

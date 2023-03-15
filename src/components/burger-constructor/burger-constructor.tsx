@@ -18,14 +18,18 @@ import {
 import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
 import { IngredientType } from "../../interfaces/ingredient-type";
 import { DragIngredient } from "./drag-ingredient/drag-ingredient";
-import { makeOrderThunk } from "../../redux/constructor/thunks";
+import { makeOrderThunk } from "../../redux/order/thunks";
+import { RootState } from "../../redux/store";
+
+const getConstructorData = (state: RootState) => ({
+  bun: state.constructorData.bun,
+  ingredients: state.constructorData.ingredients,
+  allIngredients: state.ingredients.ingredients,
+});
 
 export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
-  const { bun, ingredients, allIngredients } = useTypedSelector((state) => ({
-    bun: state.constructorData.bun,
-    ingredients: state.constructorData.ingredients,
-    allIngredients: state.ingredients.ingredients,
-  }));
+  const { bun, ingredients, allIngredients } =
+    useTypedSelector(getConstructorData);
 
   const dispatch = useTypedDispatch();
 

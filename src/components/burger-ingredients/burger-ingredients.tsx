@@ -2,6 +2,7 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useCallback, useMemo, useRef, useState } from "react";
 import { IngredientType } from "../../interfaces/ingredient-type";
 import { useTypedSelector } from "../../redux/hooks";
+import { getIngredients } from "../../redux/selectors";
 import styles from "./burger-ingredients.module.css";
 import { BurgerIngredientsProps } from "./burger-ingredients.props";
 import { IngredientsCategory } from "./ingredients-category/ingredients-category";
@@ -13,7 +14,7 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   const bunsRef = useRef<HTMLDivElement>(null);
   const fillingsRef = useRef<HTMLDivElement>(null);
   const saucesRef = useRef<HTMLDivElement>(null);
-  const { ingredients } = useTypedSelector((state) => state.ingredients);
+  const { ingredients } = useTypedSelector(getIngredients);
   const [currentIngredient, setCurrentIngredient] = useState(
     IngredientType.Bun as string
   );
