@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BurgerIngredient } from "../../interfaces/burger-ingredient";
+import { BurgerIngredient } from "interfaces/burger-ingredient";
 
 export interface IngredientDetailsState {
   ingredient: BurgerIngredient | null;

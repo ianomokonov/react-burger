@@ -1,8 +1,8 @@
 import { FC } from "react";
+import { useTypedSelector } from "redux/hooks";
+import { getOrder } from "redux/selectors";
 import styles from "./order-details.module.css";
-import DoneImg from "../../../images/done.svg";
-import { useTypedSelector } from "../../../redux/hooks";
-import { getOrder } from "../../../redux/selectors";
+import DoneImg from "images/done.svg";
 
 export const OrderDetails: FC = () => {
   const { orderNumber } = useTypedSelector(getOrder);

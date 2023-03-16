@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { useTypedSelector } from "../../../../redux/hooks";
-import { getIngredientDetails } from "../../../../redux/selectors";
+import { useTypedSelector } from "redux/hooks";
+import { getIngredientDetails } from "redux/selectors";
 import styles from "./ingredient-details.module.css";
 
 export const IngredientDetails: FC = () => {

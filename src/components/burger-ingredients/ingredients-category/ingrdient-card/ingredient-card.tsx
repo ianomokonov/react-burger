@@ -6,9 +6,9 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useMemo } from "react";
 import { useDrag } from "react-dnd";
-import { IngredientType } from "../../../../interfaces/ingredient-type";
-import { useTypedSelector } from "../../../../redux/hooks";
-import { getConstructorData } from "../../../../redux/selectors";
+import { useTypedSelector } from "redux/hooks";
+import { getConstructorData } from "redux/selectors";
+import { IngredientType } from "interfaces/ingredient-type";
 
 export const IngredientCard: FC<IngredientCardProps> = ({
   price,

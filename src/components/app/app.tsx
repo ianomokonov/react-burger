@@ -1,14 +1,14 @@
-import { AppHeader } from "../app-header/app-header";
-import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
-import { BurgerContructor } from "../burger-constructor/burger-constructor";
 import styles from "./app.module.css";
 import { FC, useEffect } from "react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
-import { getIngredientsThank } from "../../redux/ingredients/thunks";
-import { Loader } from "../loader/loader";
-import { getIngredients } from "../../redux/selectors";
+import { useTypedDispatch, useTypedSelector } from "redux/hooks";
+import { getIngredientsThank } from "redux/ingredients/thunks";
+import { AppHeader } from "components/app-header/app-header";
+import { Loader } from "components/loader/loader";
+import { BurgerIngredients } from "components/burger-ingredients/burger-ingredients";
+import { BurgerContructor } from "components/burger-constructor/burger-constructor";
+import { getIngredients } from "redux/selectors";
 
 const App: FC = () => {
   const { ingredients, isLoading } = useTypedSelector(getIngredients);

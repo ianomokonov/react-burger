@@ -1,4 +1,4 @@
-import { getIngredients } from "../../utils/data-access";
+import { getIngredients } from "utils/data-access";
 import { DispatchType } from "../store";
 import {
   ingredientsError,

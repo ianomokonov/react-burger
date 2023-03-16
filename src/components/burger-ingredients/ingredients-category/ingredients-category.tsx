@@ -1,16 +1,16 @@
 import { IngredientsCategoryProps } from "./ingredients-category.props";
 import styles from "./ingredients-category.module.css";
 import { IngredientCard } from "./ingrdient-card/ingredient-card";
-import { Modal } from "../../modal/modal";
-import { BurgerIngredient } from "../../../interfaces/burger-ingredient";
 import { forwardRef, useCallback } from "react";
 import { IngredientDetails } from "./ingredient-details/ingredient-details";
-import { useTypedDispatch, useTypedSelector } from "../../../redux/hooks";
-import { getIngredientDetails } from "../../../redux/selectors";
+import { useTypedDispatch, useTypedSelector } from "redux/hooks";
+import { getIngredientDetails } from "redux/selectors";
+import { BurgerIngredient } from "interfaces/burger-ingredient";
 import {
   closeIngredientDetailsModal,
   openIngredientDetailsModal,
-} from "../../../redux/ingredient-details/ingredient-details.slice";
+} from "redux/ingredient-details/ingredient-details.slice";
+import { Modal } from "components/modal/modal";
 
 export const IngredientsCategory = forwardRef<
   HTMLDivElement,

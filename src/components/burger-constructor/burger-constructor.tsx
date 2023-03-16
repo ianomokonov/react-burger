@@ -6,20 +6,20 @@ import {
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
 import { FC, useCallback, useMemo, useState } from "react";
-import { Modal } from "../modal/modal";
-import { OrderDetails } from "./order-details/order-details";
-import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
 import { useDrop } from "react-dnd";
+import { RootState } from "redux/store";
+import { useTypedDispatch, useTypedSelector } from "redux/hooks";
+import { IngredientType } from "interfaces/ingredient-type";
 import {
   addIngredient,
   removeIngredient,
   setBun,
-} from "../../redux/constructor/constructor.slice";
-import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
-import { IngredientType } from "../../interfaces/ingredient-type";
+} from "redux/constructor/constructor.slice";
+import { makeOrderThunk } from "redux/order/thunks";
+import { ConstructorIngredient } from "interfaces/constructor-ingredient";
 import { DragIngredient } from "./drag-ingredient/drag-ingredient";
-import { makeOrderThunk } from "../../redux/order/thunks";
-import { RootState } from "../../redux/store";
+import { Modal } from "components/modal/modal";
+import { OrderDetails } from "./order-details/order-details";
 
 const getConstructorData = (state: RootState) => ({
   bun: state.constructorData.bun,

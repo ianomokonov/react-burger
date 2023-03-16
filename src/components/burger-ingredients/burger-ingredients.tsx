@@ -1,8 +1,8 @@
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { IngredientType } from "interfaces/ingredient-type";
 import { FC, useCallback, useMemo, useRef, useState } from "react";
-import { IngredientType } from "../../interfaces/ingredient-type";
-import { useTypedSelector } from "../../redux/hooks";
-import { getIngredients } from "../../redux/selectors";
+import { useTypedSelector } from "redux/hooks";
+import { getIngredients } from "redux/selectors";
 import styles from "./burger-ingredients.module.css";
 import { BurgerIngredientsProps } from "./burger-ingredients.props";
 import { IngredientsCategory } from "./ingredients-category/ingredients-category";
