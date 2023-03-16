@@ -2,66 +2,241 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "./order-details/order-details";
+import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
+import { useDrop } from "react-dnd";
+import {
+  addIngredient,
+  removeIngredient,
+  setBun,
+} from "../../redux/constructor/constructor.slice";
+import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
+import { IngredientType } from "../../interfaces/ingredient-type";
+import { DragIngredient } from "./drag-ingredient/drag-ingredient";
+import { makeOrderThunk } from "../../redux/order/thunks";
+import { RootState } from "../../redux/store";
 
-export const BurgerContructor: FC<BurgerConstructorProps> = ({
-  ingredients,
-  className,
-}) => {
-  const totalPrice = useMemo(() => {
-    return ingredients.reduce((prev, curr) => prev + curr.price, 0);
-  }, [ingredients]);
+const getConstructorData = (state: RootState) => ({
+  bun: state.constructorData.bun,
+  ingredients: state.constructorData.ingredients,
+  allIngredients: state.ingredients.ingredients,
+});
+
+export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
+  const { bun, ingredients, allIngredients } =
+    useTypedSelector(getConstructorData);
+
+  const dispatch = useTypedDispatch();
 
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
 
-  const toggleOrderModal = () => {
-    setIsOrderModalOpened(!isOrderModalOpened);
+  const [{ isTopBunHovered }, topBunDropRef] = useDrop({
+    accept: IngredientType.Bun,
+    drop: (item: { id: string }) => {
+      const stateIngredient = allIngredients.find(
+        (ingredient) => ingredient._id === item.id
+      );
+      if (!stateIngredient) {
+        return;
+      }
+
+      dispatch(setBun(stateIngredient));
+    },
+    collect: (monitor) => ({
+      isTopBunHovered: monitor.isOver(),
+    }),
+  });
+
+  const [{ isBottomBunHovered }, bottomBunDropRef] = useDrop({
+    accept: IngredientType.Bun,
+    drop: (item: { id: string }) => {
+      const stateIngredient = allIngredients.find(
+        (ingredient) => ingredient._id === item.id
+      );
+      if (!stateIngredient) {
+        return;
+      }
+
+      dispatch(setBun(stateIngredient));
+    },
+    collect: (monitor) => ({
+      isBottomBunHovered: monitor.isOver(),
+    }),
+  });
+
+  const [{ isItemsHovered }, itemsDropRef] = useDrop({
+    accept: IngredientType.Main,
+    drop: (item: { id: string }, monitor) => {
+      if (monitor.didDrop()) {
+        return;
+      }
+      onAddIngredient(item.id);
+    },
+    collect: (monitor) => ({
+      isItemsHovered: monitor.isOver(),
+    }),
+  });
+
+  const totalPrice = useMemo(() => {
+    const bunsPrice = bun ? bun.price * 2 : 0;
+    return (
+      ingredients?.reduce((prev, cur) => prev + cur.price, bunsPrice) ||
+      bunsPrice
+    );
+  }, [bun, ingredients]);
+
+  const onAddIngredient = useCallback(
+    (id: string, index?: number) => {
+      const stateIngredient = allIngredients.find(
+        (ingredient) => ingredient._id === id
+      );
+      if (!stateIngredient) {
+        return;
+      }
+
+      dispatch(addIngredient({ ingredient: stateIngredient, index }));
+    },
+    [allIngredients, dispatch]
+  );
+
+  const onMakeOrderClick = async () => {
+    if (!bun) {
+      return;
+    }
+    await dispatch(
+      makeOrderThunk([
+        bun._id,
+        bun._id,
+        ...ingredients.map((ingredient) => ingredient._id),
+      ])
+    );
+    setIsOrderModalOpened(true);
   };
+
+  const closeOrderModal = () => {
+    setIsOrderModalOpened(false);
+  };
+
+  const onRemoveIngredient = useCallback(
+    (ingredient: ConstructorIngredient) => {
+      dispatch(removeIngredient(ingredient));
+    },
+    [dispatch]
+  );
+
+  const getDragIngredient = useCallback(
+    (ingredient: ConstructorIngredient, index: number) => (
+      <DragIngredient
+        key={ingredient.uniqueId}
+        index={index}
+        ingredient={ingredient}
+        onRemoveIngredient={onRemoveIngredient}
+        onAddIngredient={onAddIngredient}
+        className={`pl-8 ${styles.ingredient}`}
+        extraClass={styles.ingredient__card}
+      />
+    ),
+    [onRemoveIngredient, onAddIngredient]
+  );
 
   return (
     <>
       <div className={`pl-4 pb-4 ${className}`}>
-        <div className="pl-8">
-          <ConstructorElement
-            type="top"
-            extraClass="mb-4"
-            isLocked={true}
-            text={ingredients[0].name}
-            price={ingredients[0].price}
-            thumbnail={ingredients[0].image}
-          />
-        </div>
-
-        <div className={`${styles.main} custom-scroll`}>
-          {ingredients.slice(1, -2).map((ingredient) => (
-            <div key={ingredient._id} className={`pl-8 ${styles.ingredient}`}>
-              <DragIcon type="primary" />
-              <ConstructorElement
-                extraClass={styles.ingredient__card}
-                text={ingredient.name}
-                price={ingredient.price}
-                thumbnail={ingredient.image}
-              />
+        {!!bun ? (
+          <div className="pl-8" ref={topBunDropRef}>
+            <ConstructorElement
+              type="top"
+              extraClass="mb-4"
+              isLocked={true}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+        ) : (
+          <div className="pl-8">
+            <div
+              ref={topBunDropRef}
+              className="constructor-element constructor-element_pos_top mb-4"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderWidth: "2px",
+                borderStyle: "dashed",
+                borderColor:
+                  isTopBunHovered || isBottomBunHovered
+                    ? "var(--colors-interface-accent)"
+                    : "transparent",
+              }}
+            >
+              <span>Выберите булку</span>
             </div>
-          ))}
+          </div>
+        )}
+
+        <div
+          ref={itemsDropRef}
+          style={{
+            borderWidth: "2px",
+            borderStyle: "dashed",
+            borderColor:
+              isItemsHovered && !ingredients.length
+                ? "var(--colors-interface-accent)"
+                : "transparent",
+          }}
+          className={`${styles.main} custom-scroll ${
+            ingredients.length ? "" : styles.main_empty
+          }`}
+        >
+          {ingredients.length ? (
+            ingredients.map((ingredient, index) =>
+              getDragIngredient(ingredient, index)
+            )
+          ) : (
+            <span className="text text_type_main-default text_color_inactive">
+              Добавьте ингредиенты
+            </span>
+          )}
         </div>
 
-        <div className="pl-8 mb-10">
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            extraClass="mt-4"
-            text={ingredients[ingredients.length - 1].name}
-            price={ingredients[ingredients.length - 1].price}
-            thumbnail={ingredients[ingredients.length - 1].image}
-          />
-        </div>
+        {!!bun ? (
+          <div className="pl-8 mb-10" ref={bottomBunDropRef}>
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              extraClass="mt-4"
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+        ) : (
+          <div className="pl-8 mb-10">
+            <div
+              ref={bottomBunDropRef}
+              className="constructor-element constructor-element_pos_bottom mt-4"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderWidth: "2px",
+                borderStyle: "dashed",
+                borderColor:
+                  isTopBunHovered || isBottomBunHovered
+                    ? "var(--colors-interface-accent)"
+                    : "transparent",
+              }}
+            >
+              <span>Выберите булку</span>
+            </div>
+          </div>
+        )}
 
         <div className={styles.order}>
           <div className={`${styles.order__sum} mr-10`}>
@@ -72,14 +247,14 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({
             htmlType="button"
             type="primary"
             size="large"
-            onClick={toggleOrderModal}
+            onClick={onMakeOrderClick}
           >
             Оформить заказ
           </Button>
         </div>
       </div>
       {isOrderModalOpened && (
-        <Modal onClose={toggleOrderModal}>
+        <Modal onClose={closeOrderModal}>
           <OrderDetails />
         </Modal>
       )}

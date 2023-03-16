@@ -3,26 +3,38 @@ import styles from "./ingredients-category.module.css";
 import { IngredientCard } from "./ingrdient-card/ingredient-card";
 import { Modal } from "../../modal/modal";
 import { BurgerIngredient } from "../../../interfaces/burger-ingredient";
-import { useState } from "react";
+import { forwardRef, useCallback } from "react";
 import { IngredientDetails } from "./ingredient-details/ingredient-details";
-import { FC } from "react";
+import { useTypedDispatch, useTypedSelector } from "../../../redux/hooks";
+import { getIngredientDetails } from "../../../redux/selectors";
+import {
+  closeIngredientDetailsModal,
+  openIngredientDetailsModal,
+} from "../../../redux/ingredient-details/ingredient-details.slice";
 
-export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
-  className,
-  ingredients,
-  name,
-}) => {
-  const [activeIngredient, setActiveIngredient] = useState<
-    BurgerIngredient | undefined
-  >();
+export const IngredientsCategory = forwardRef<
+  HTMLDivElement,
+  IngredientsCategoryProps
+>(({ className, ingredients, name }, ref) => {
+  const dispatch = useTypedDispatch();
 
-  const toggleDelailsModal = (ingredient?: BurgerIngredient) => {
-    setActiveIngredient(ingredient);
-  };
+  const { ingredient: activeIngredient } =
+    useTypedSelector(getIngredientDetails);
+
+  const toggleDelailsModal = useCallback(
+    (ingredient?: BurgerIngredient) => {
+      if (ingredient) {
+        dispatch(openIngredientDetailsModal(ingredient));
+        return;
+      }
+      dispatch(closeIngredientDetailsModal());
+    },
+    [dispatch]
+  );
 
   return (
     <>
-      <div className={className}>
+      <div className={className} ref={ref}>
         <h3 className="text text_type_main-medium">{name}</h3>
         <div
           className={`${styles["ingredient-category__items"]} pt-6 pl-4 pr-4`}
@@ -38,9 +50,9 @@ export const IngredientsCategory: FC<IngredientsCategoryProps> = ({
       </div>
       {activeIngredient && (
         <Modal title="Детали ингредиента" onClose={() => toggleDelailsModal()}>
-          <IngredientDetails ingredient={activeIngredient} />
+          <IngredientDetails />
         </Modal>
       )}
     </>
   );
-};
+});

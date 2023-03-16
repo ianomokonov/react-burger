@@ -1,9 +1,15 @@
 .main {
   max-height: calc(100% - var(--offset-base-size) * 74);
+  min-height: calc(100% - var(--offset-base-size) * 74);
   overflow: auto;
   display: flex;
   flex-direction: column;
   gap: calc(var(--offset-base-size) * 4);
+}
+
+.main_empty {
+  align-items: center;
+  justify-content: center;
 }
 
 .ingredient {

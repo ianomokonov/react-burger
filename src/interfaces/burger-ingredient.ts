@@ -3,7 +3,7 @@ import { IngredientType } from "./ingredient-type";
 export interface BurgerIngredient {
   _id: string;
   name: string;
-  type: IngredientType | string;
+  type: IngredientType | 'bun' | 'main' | 'sauce';
   proteins: number;
   fat: number;
   carbohydrates: number;
