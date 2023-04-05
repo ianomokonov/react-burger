@@ -23,8 +23,6 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
     setCurrentIngredient(type);
     switch (type) {
       case IngredientType.Bun: {
-        console.log(bunsRef.current);
-
         bunsRef.current?.scrollIntoView(true);
         return;
       }

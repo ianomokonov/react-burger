@@ -18,10 +18,16 @@ body {
   height: 100%;
 }
 
-.pt-24{
+.pt-24 {
   padding-top: calc(var(--offset-base-size) * 24);
 }
 
-.pb-24{
+.pb-24 {
   padding-bottom: calc(var(--offset-base-size) * 24);
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

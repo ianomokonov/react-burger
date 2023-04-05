@@ -1,10 +1,16 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { useTypedSelector } from "redux/hooks";
-import { getIngredientDetails } from "redux/selectors";
 import styles from "./ingredient-details.module.css";
+import { getIngredients } from "redux/selectors";
+import { useParams } from "react-router-dom";
 
 export const IngredientDetails: FC = () => {
-  const { ingredient } = useTypedSelector(getIngredientDetails);
+  const { id: ingredientId } = useParams();
+  const { ingredients } = useTypedSelector(getIngredients);
+  const ingredient = useMemo(
+    () => ingredients.find((ing) => ing._id === ingredientId),
+    [ingredients, ingredientId]
+  );
 
   if (!ingredient) {
     return null;

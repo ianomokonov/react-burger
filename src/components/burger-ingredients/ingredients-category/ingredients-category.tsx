@@ -1,36 +1,15 @@
 import { IngredientsCategoryProps } from "./ingredients-category.props";
 import styles from "./ingredients-category.module.css";
 import { IngredientCard } from "./ingrdient-card/ingredient-card";
-import { forwardRef, useCallback } from "react";
-import { IngredientDetails } from "./ingredient-details/ingredient-details";
-import { useTypedDispatch, useTypedSelector } from "redux/hooks";
-import { getIngredientDetails } from "redux/selectors";
-import { BurgerIngredient } from "interfaces/burger-ingredient";
-import {
-  closeIngredientDetailsModal,
-  openIngredientDetailsModal,
-} from "redux/ingredient-details/ingredient-details.slice";
-import { Modal } from "components/modal/modal";
+import { forwardRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const IngredientsCategory = forwardRef<
   HTMLDivElement,
   IngredientsCategoryProps
 >(({ className, ingredients, name }, ref) => {
-  const dispatch = useTypedDispatch();
-
-  const { ingredient: activeIngredient } =
-    useTypedSelector(getIngredientDetails);
-
-  const toggleDelailsModal = useCallback(
-    (ingredient?: BurgerIngredient) => {
-      if (ingredient) {
-        dispatch(openIngredientDetailsModal(ingredient));
-        return;
-      }
-      dispatch(closeIngredientDetailsModal());
-    },
-    [dispatch]
-  );
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -41,18 +20,17 @@ export const IngredientsCategory = forwardRef<
         >
           {ingredients.map((ingredient) => (
             <IngredientCard
-              {...ingredient}
               key={ingredient._id}
-              onClick={() => toggleDelailsModal(ingredient)}
+              {...ingredient}
+              onClick={() =>
+                navigate(`/ingredients/${ingredient._id}`, {
+                  state: { background: location },
+                })
+              }
             />
           ))}
         </div>
       </div>
-      {activeIngredient && (
-        <Modal title="Детали ингредиента" onClose={() => toggleDelailsModal()}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </>
   );
 });

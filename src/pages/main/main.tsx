@@ -14,8 +14,11 @@ export const Main: FC = () => {
 
   const dispatch = useTypedDispatch();
   useEffect(() => {
+    if (ingredients?.length) {
+      return;
+    }
     dispatch(getIngredientsThank());
-  }, [dispatch]);
+  }, [dispatch, ingredients]);
 
   if (isLoading) {
     return (
@@ -25,7 +28,7 @@ export const Main: FC = () => {
     );
   }
   return (
-    <>
+    <div className="pt-10">
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
       {!!ingredients.length && (
         <div className={styles.content}>
@@ -35,6 +38,6 @@ export const Main: FC = () => {
           </DndProvider>
         </div>
       )}
-    </>
+    </div>
   );
 };

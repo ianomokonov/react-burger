@@ -27,7 +27,7 @@ export const Login: FC = () => {
         />
         <Input
           type={showPassword ? "text" : "password"}
-          placeholder={"Password"}
+          placeholder={"Пароль"}
           onChange={(e) =>
             setFormValue((prev) => ({ ...prev, password: e.target.value }))
           }

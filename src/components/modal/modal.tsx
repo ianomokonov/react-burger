@@ -16,7 +16,7 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
   const escCloseHandler = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === ESC_KEY) {
-        onClose();
+        onClose && onClose();
       }
     },
     [onClose]
