@@ -1,45 +1,30 @@
-import styles from "./app.module.css";
-import { FC, useEffect } from "react";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
-import { useTypedDispatch, useTypedSelector } from "redux/hooks";
-import { getIngredientsThank } from "redux/ingredients/thunks";
+import { FC } from "react";
 import { AppHeader } from "components/app-header/app-header";
-import { Loader } from "components/loader/loader";
-import { BurgerIngredients } from "components/burger-ingredients/burger-ingredients";
-import { BurgerContructor } from "components/burger-constructor/burger-constructor";
-import { getIngredients } from "redux/selectors";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Main } from "pages/main/main";
+import { Login } from "pages/login/login";
+import { Register } from "pages/register/register";
+import { ResetPassword } from "pages/reset-password/reset-password";
+import { ForgotPassword } from "pages/forgot-password/forgot-password";
+import { Profile } from "pages/profile/profile";
+import { Ingredient } from "pages/ingredient/ingredient";
 
 const App: FC = () => {
-  const { ingredients, isLoading } = useTypedSelector(getIngredients);
-
-  const dispatch = useTypedDispatch();
-  useEffect(() => {
-    dispatch(getIngredientsThank());
-  }, [dispatch]);
   return (
     <div className="App">
       <AppHeader />
-      <main
-        className={`container pt-10 pl-5 pr-5 ${
-          isLoading ? styles.loading : ""
-        }`}
-      >
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
-            {!!ingredients.length && (
-              <div className={styles.content}>
-                <DndProvider backend={HTML5Backend}>
-                  <BurgerIngredients />
-                  <BurgerContructor />
-                </DndProvider>
-              </div>
-            )}
-          </>
-        )}
+      <main className={`container pt-10 pl-5 pr-5`}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/ingredient/:id" element={<Ingredient />} />
+          </Routes>
+        </BrowserRouter>
       </main>
     </div>
   );
