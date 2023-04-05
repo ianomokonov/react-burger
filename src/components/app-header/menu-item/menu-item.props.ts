@@ -2,7 +2,7 @@ import { TIconProps } from "@ya.praktikum/react-developer-burger-ui-components/d
 import { FunctionComponent } from "react";
 
 export interface MenuItemProps {
+  to: string;
   icon: FunctionComponent<TIconProps>;
-  isActive?: boolean;
   className?: string;
 }

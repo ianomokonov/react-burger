@@ -13,16 +13,16 @@ export const AppHeader: FC = () => {
     <header className={styles["app-header"]}>
       <div className={`container pt-4 pb-4 ${styles["app-header__content"]}`}>
         <div className={styles.links}>
-          <MenuItem icon={BurgerIcon} isActive={true}>
+          <MenuItem to="/" icon={BurgerIcon}>
             Конструктор
           </MenuItem>
-          <MenuItem icon={ListIcon} isActive={false}>
+          <MenuItem to="/orders" icon={ListIcon}>
             Лента заказов
           </MenuItem>
         </div>
         <Logo />
         <div className={styles.links}>
-          <MenuItem icon={ProfileIcon} isActive={false}>
+          <MenuItem to="/profile" icon={ProfileIcon}>
             Личный кабинет
           </MenuItem>
         </div>
