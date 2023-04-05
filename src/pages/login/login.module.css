@@ -1,0 +1,24 @@
+.main {
+  padding-top: 18vh;
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.action {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+
+  margin-bottom: calc(var(--offset-base-size) * 4);
+}
+
+.action a {
+  color: var(--colors-interface-accent);
+  text-decoration: none;
+}

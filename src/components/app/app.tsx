@@ -13,7 +13,7 @@ const App: FC = () => {
   return (
     <div className="App">
       <AppHeader />
-      <main className={`container pt-10 pl-5 pr-5`}>
+      <main className={`container pl-5 pr-5`}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Main />} />
