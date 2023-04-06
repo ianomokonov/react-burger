@@ -41,7 +41,7 @@ const get = (url: string) => {
 };
 
 const post = <T>(url: string, body: T, withAuth = true) => {
-  return (withAuth ? fetch : fetchWithAuth)(url, {
+  return (withAuth ? fetchWithAuth : fetch)(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -51,7 +51,7 @@ const post = <T>(url: string, body: T, withAuth = true) => {
 };
 
 const patch = <T>(url: string, body: T, withAuth = true) => {
-  return (withAuth ? fetch : fetchWithAuth)(url, {
+  return (withAuth ? fetchWithAuth : fetch)(url, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json;charset=utf-8",

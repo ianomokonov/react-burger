@@ -1,15 +1,30 @@
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useState } from "react";
-import { useTypedSelector } from "redux/hooks";
+import { useTypedDispatch, useTypedSelector } from "redux/hooks";
 import { getUser } from "redux/selectors";
+import { updateUserThunk } from "redux/user/thunks";
+import { UpdateUserRequest } from "utils/models/update-user.request";
 
 export const EditForm: FC = () => {
   const { profile } = useTypedSelector(getUser);
-  const [formValue, setFormValue] = useState({
+  const dispatch = useTypedDispatch();
+  const [editingFields, setEditingFields] = useState({
+    name: false,
+    email: false,
+    password: false,
+  });
+  const [formValue, setFormValue] = useState<Required<UpdateUserRequest>>({
     name: profile?.name || "",
     email: profile?.email || "",
-    password: "1234",
+    password: "",
   });
+
+  const onIconClick = async (name: keyof UpdateUserRequest) => {
+    if (editingFields[name]) {
+      await dispatch(updateUserThunk({ [name]: formValue[name] }));
+    }
+    setEditingFields({ ...editingFields, [name]: !editingFields[name] });
+  };
   return (
     <>
       <Input
@@ -19,8 +34,9 @@ export const EditForm: FC = () => {
           setFormValue((prev) => ({ ...prev, name: e.target.value }))
         }
         value={formValue.name}
-        disabled
-        icon={"EditIcon"}
+        disabled={!editingFields.name}
+        onIconClick={() => onIconClick("name")}
+        icon={!editingFields.name ? "EditIcon" : "CheckMarkIcon"}
         name={"name"}
         error={false}
         size={"default"}
@@ -28,27 +44,29 @@ export const EditForm: FC = () => {
       />
       <Input
         type={"email"}
-        placeholder={"Login"}
+        placeholder={"Логин"}
         onChange={(e) =>
           setFormValue((prev) => ({ ...prev, email: e.target.value }))
         }
         value={formValue.email}
-        disabled
+        onIconClick={() => onIconClick("email")}
+        disabled={!editingFields.email}
         name={"email"}
-        icon={"EditIcon"}
+        icon={!editingFields.email ? "EditIcon" : "CheckMarkIcon"}
         error={false}
         size={"default"}
         extraClass="mb-6"
       />
       <Input
         type="password"
-        placeholder={"Пароль"}
+        placeholder={"Введите новый пароль"}
+        onIconClick={() => onIconClick("password")}
         onChange={(e) =>
           setFormValue((prev) => ({ ...prev, password: e.target.value }))
         }
         value={formValue.password}
-        disabled
-        icon={"EditIcon"}
+        disabled={!editingFields.password}
+        icon={!editingFields.password ? "EditIcon" : "CheckMarkIcon"}
         name={"password"}
         error={false}
         size={"default"}
