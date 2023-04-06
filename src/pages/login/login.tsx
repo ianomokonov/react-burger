@@ -4,15 +4,26 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useTypedDispatch } from "redux/hooks";
+import { loginThunk } from "redux/user/thunks";
 
 export const Login: FC = () => {
   const [formValue, setFormValue] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useTypedDispatch();
+  const navidate = useNavigate();
+
+  const login = async () => {
+    await dispatch(loginThunk(formValue));
+    navidate("/profile");
+  };
   return (
     <div className={styles.main}>
       <form className={styles.form}>
-        <p className={`${styles.title} text text_type_main-medium mb-6`}>Вход</p>
+        <p className={`${styles.title} text text_type_main-medium mb-6`}>
+          Вход
+        </p>
         <Input
           type={"email"}
           placeholder={"Email"}
@@ -44,6 +55,7 @@ export const Login: FC = () => {
           type="primary"
           size="medium"
           extraClass="mb-20"
+          onClick={login}
         >
           Войти
         </Button>

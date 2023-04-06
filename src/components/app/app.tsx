@@ -12,6 +12,7 @@ import { ResetPassword } from "pages/reset-password/reset-password";
 import { Layout } from "components/layout/layout";
 import { Modal } from "components/modal/modal";
 import { IngredientDetails } from "components/burger-ingredients/ingredients-category/ingredient-details/ingredient-details";
+import { ProtectedRoute } from "components/protected-route/protected-route";
 
 const App: FC = () => {
   const location = useLocation();
@@ -26,7 +27,10 @@ const App: FC = () => {
           <Route path="register" element={<Register />} />
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="profile" element={<Profile />}>
+          <Route
+            path="profile"
+            element={<ProtectedRoute element={<Profile />} />}
+          >
             <Route index element={<EditForm />} />
           </Route>
           <Route path="ingredients/:id" element={<Ingredient />} />

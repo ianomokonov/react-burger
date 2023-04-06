@@ -1,8 +1,17 @@
 import { FC } from "react";
 import styles from "./profile.module.css";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useTypedDispatch } from "redux/hooks";
+import { logoutThunk } from "redux/user/thunks";
 
 export const Profile: FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useTypedDispatch();
+
+  const logout = async () => {
+    await dispatch(logoutThunk());
+    navigate("/login");
+  };
   return (
     <div className={styles.main}>
       <div className={styles.menu}>
@@ -26,16 +35,12 @@ export const Profile: FC = () => {
         >
           История заказов
         </NavLink>
-        <NavLink
-          className={({ isActive }) =>
-            `text text_type_main-medium ${styles.menu__item} ${
-              isActive ? "" : styles.text_color_inactive
-            }`
-          }
-          to="/logout"
+        <span
+          onClick={logout}
+          className={`text text_type_main-medium ${styles.menu__item} ${styles.text_color_inactive}`}
         >
           Выход
-        </NavLink>
+        </span>
         <span
           className="text text_type_main-default"
           style={{ opacity: "0.4" }}

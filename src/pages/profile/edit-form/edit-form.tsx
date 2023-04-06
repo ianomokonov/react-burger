@@ -1,10 +1,13 @@
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useState } from "react";
+import { useTypedSelector } from "redux/hooks";
+import { getUser } from "redux/selectors";
 
 export const EditForm: FC = () => {
+  const { profile } = useTypedSelector(getUser);
   const [formValue, setFormValue] = useState({
-    name: "Иван",
-    email: "nomokonov.vana@yandex.ru",
+    name: profile?.name || "",
+    email: profile?.email || "",
     password: "1234",
   });
   return (

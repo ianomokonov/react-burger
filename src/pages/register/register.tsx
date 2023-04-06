@@ -3,8 +3,10 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../login/login.module.css";
+import { useTypedDispatch } from "redux/hooks";
+import { createUserThunk } from "redux/user/thunks";
 
 export const Register: FC = () => {
   const [formValue, setFormValue] = useState({
@@ -13,6 +15,13 @@ export const Register: FC = () => {
     name: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useTypedDispatch();
+  const navigate = useNavigate();
+
+  const onBtnClick = async () => {
+    await dispatch(createUserThunk(formValue));
+    navigate("/profile");
+  };
   return (
     <div className={styles.main}>
       <form className={styles.form}>
@@ -62,6 +71,7 @@ export const Register: FC = () => {
           type="primary"
           size="medium"
           extraClass="mb-20"
+          onClick={onBtnClick}
         >
           Зарегистрироваться
         </Button>
