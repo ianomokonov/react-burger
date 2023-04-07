@@ -13,9 +13,13 @@ export const userSlice = createSlice({
     setUserErrorMessage: (state, action: PayloadAction<string | null>) => {
       state.errorMessage = action.payload;
     },
+    setResetEmail: (state, action: PayloadAction<string | null>) => {
+      state.resetEmail = action.payload;
+    },
   },
 });
 
-export const { setProfileInfo, setUserErrorMessage } = userSlice.actions;
+export const { setProfileInfo, setUserErrorMessage, setResetEmail } =
+  userSlice.actions;
 
 export const userReducer = userSlice.reducer;

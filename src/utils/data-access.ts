@@ -98,6 +98,17 @@ export const logout = (): Promise<ProfileState> => {
   );
 };
 
+export const resetPassword = (email: string): Promise<void> => {
+  return post(`${BASE_URL}/password-reset`, { email }, false);
+};
+
+export const resetPasswordWithCode = (
+  token: string,
+  password: string
+): Promise<void> => {
+  return post(`${BASE_URL}/password-reset/reset`, { password, token }, false);
+};
+
 export const getUser = (): Promise<ProfileState> => {
   return get(`${BASE_URL}/auth/user`).then((res) => res.user);
 };

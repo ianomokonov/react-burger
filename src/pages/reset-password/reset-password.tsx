@@ -3,12 +3,21 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../login/login.module.css";
+import { useTypedDispatch } from "redux/hooks";
+import { resetPasswordThunk } from "redux/user/thunks";
 
 export const ResetPassword: FC = () => {
   const [formValue, setFormValue] = useState({ newPassword: "", code: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useTypedDispatch();
+  const navigate = useNavigate();
+
+  const onSubmit = async () => {
+    await dispatch(resetPasswordThunk(formValue.newPassword, formValue.code));
+    navigate("/login");
+  };
   return (
     <div className={styles.main}>
       <form className={styles.form}>
@@ -46,6 +55,7 @@ export const ResetPassword: FC = () => {
           type="primary"
           size="medium"
           extraClass="mb-20"
+          onClick={onSubmit}
         >
           Восстановить
         </Button>

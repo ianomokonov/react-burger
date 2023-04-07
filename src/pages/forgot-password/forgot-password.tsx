@@ -3,12 +3,21 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "../login/login.module.css";
+import { useTypedDispatch } from "redux/hooks";
+import { getResetCodeThunk } from "redux/user/thunks";
 
 export const ForgotPassword: FC = () => {
   const [formValue, setFormValue] = useState({ email: "" });
+  const dispatch = useTypedDispatch();
+  const navigate = useNavigate();
+
+  const onSubmit = async () => {
+    await dispatch(getResetCodeThunk(formValue.email));
+    navigate("/reset-password");
+  };
   return (
     <div className={styles.main}>
       <form className={styles.form}>
@@ -27,16 +36,15 @@ export const ForgotPassword: FC = () => {
           size={"default"}
           extraClass="mb-6"
         />
-        <Link to="/reset-password">
-          <Button
-            htmlType="button"
-            type="primary"
-            size="medium"
-            extraClass="mb-20"
-          >
-            Восстановить
-          </Button>
-        </Link>
+        <Button
+          htmlType="button"
+          type="primary"
+          size="medium"
+          extraClass="mb-20"
+          onClick={onSubmit}
+        >
+          Восстановить
+        </Button>
         <div>
           <div className={styles.action}>
             <span className="text text_type_main-default text_color_inactive mr-2">

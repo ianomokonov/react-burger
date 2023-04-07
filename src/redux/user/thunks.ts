@@ -1,10 +1,16 @@
 import { DispatchType } from "redux/store";
-import { setProfileInfo, setUserErrorMessage } from "./user.slice";
+import {
+  setProfileInfo,
+  setResetEmail,
+  setUserErrorMessage,
+} from "./user.slice";
 import {
   createUser,
   getUser,
   login,
   logout,
+  resetPassword,
+  resetPasswordWithCode,
   updateUser,
 } from "utils/data-access";
 import { UpdateUserRequest } from "utils/models/update-user.request";
@@ -64,6 +70,30 @@ export const logoutThunk = () => {
     try {
       await logout();
       dispatch(setProfileInfo(null));
+    } catch (error: any) {
+      dispatch(setUserErrorMessage(error.message as string));
+      console.error(error);
+    }
+  };
+};
+
+export const getResetCodeThunk = (email: string) => {
+  return async (dispatch: DispatchType) => {
+    try {
+      await resetPassword(email);
+      dispatch(setResetEmail(email));
+    } catch (error: any) {
+      dispatch(setUserErrorMessage(error.message as string));
+      console.error(error);
+    }
+  };
+};
+
+export const resetPasswordThunk = (password: string, token: string) => {
+  return async (dispatch: DispatchType) => {
+    try {
+      await resetPasswordWithCode(token, password);
+      dispatch(setResetEmail(null));
     } catch (error: any) {
       dispatch(setUserErrorMessage(error.message as string));
       console.error(error);
