@@ -2,7 +2,7 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { FC, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../login/login.module.css";
 import { useTypedDispatch } from "redux/hooks";
@@ -18,13 +18,13 @@ export const Register: FC = () => {
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
 
-  const onBtnClick = async () => {
-    await dispatch(createUserThunk(formValue));
-    navigate("/profile");
+  const onBtnClick = async (e: FormEvent) => {
+    e.preventDefault();
+    await dispatch(createUserThunk(formValue, () => navigate("/profile")));
   };
   return (
     <div className={styles.main}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onBtnClick}>
         <p className={`${styles.title} text text_type_main-medium mb-6`}>
           Регистрация
         </p>
@@ -67,11 +67,10 @@ export const Register: FC = () => {
           extraClass="mb-6"
         />
         <Button
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
           extraClass="mb-20"
-          onClick={onBtnClick}
         >
           Зарегистрироваться
         </Button>

@@ -29,11 +29,15 @@ export const getUserThunk = () => {
   };
 };
 
-export const updateUserThunk = (userData: UpdateUserRequest) => {
+export const updateUserThunk = (
+  userData: UpdateUserRequest,
+  callback?: () => void
+) => {
   return async (dispatch: DispatchType) => {
     try {
       const user = await updateUser(userData);
       dispatch(setProfileInfo(user));
+      callback && callback();
     } catch (error: any) {
       dispatch(setUserErrorMessage(error.message as string));
       console.error(error);
@@ -41,11 +45,12 @@ export const updateUserThunk = (userData: UpdateUserRequest) => {
   };
 };
 
-export const loginThunk = (loginData: LoginRequest) => {
+export const loginThunk = (loginData: LoginRequest, callback: () => void) => {
   return async (dispatch: DispatchType) => {
     try {
       const user = await login(loginData);
       dispatch(setProfileInfo(user));
+      callback();
     } catch (error: any) {
       dispatch(setUserErrorMessage(error.message as string));
       console.error(error);
@@ -53,7 +58,7 @@ export const loginThunk = (loginData: LoginRequest) => {
   };
 };
 
-export const createUserThunk = (createUserData: CreateUserRequest) => {
+export const createUserThunk = (createUserData: CreateUserRequest, callback: () => void) => {
   return async (dispatch: DispatchType) => {
     try {
       const user = await createUser(createUserData);
@@ -65,7 +70,7 @@ export const createUserThunk = (createUserData: CreateUserRequest) => {
   };
 };
 
-export const logoutThunk = () => {
+export const logoutThunk = (callback: () => void) => {
   return async (dispatch: DispatchType) => {
     try {
       await logout();
@@ -77,7 +82,7 @@ export const logoutThunk = () => {
   };
 };
 
-export const getResetCodeThunk = (email: string) => {
+export const getResetCodeThunk = (email: string, callback: () => void) => {
   return async (dispatch: DispatchType) => {
     try {
       await resetPassword(email);
@@ -89,7 +94,7 @@ export const getResetCodeThunk = (email: string) => {
   };
 };
 
-export const resetPasswordThunk = (password: string, token: string) => {
+export const resetPasswordThunk = (password: string, token: string, callback: () => void) => {
   return async (dispatch: DispatchType) => {
     try {
       await resetPasswordWithCode(token, password);

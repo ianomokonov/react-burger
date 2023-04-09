@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import styles from "./login.module.css";
 import {
   Button,
@@ -14,13 +14,13 @@ export const Login: FC = () => {
   const dispatch = useTypedDispatch();
   const navidate = useNavigate();
 
-  const login = async () => {
-    await dispatch(loginThunk(formValue));
-    navidate("/profile");
+  const login = async (e: FormEvent) => {
+    e.preventDefault();
+    await dispatch(loginThunk(formValue, () => navidate("/profile")));
   };
   return (
     <div className={styles.main}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={login}>
         <p className={`${styles.title} text text_type_main-medium mb-6`}>
           Вход
         </p>
@@ -51,11 +51,10 @@ export const Login: FC = () => {
           extraClass="mb-6"
         />
         <Button
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
           extraClass="mb-20"
-          onClick={login}
         >
           Войти
         </Button>

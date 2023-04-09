@@ -9,8 +9,7 @@ export const Profile: FC = () => {
   const dispatch = useTypedDispatch();
 
   const logout = async () => {
-    await dispatch(logoutThunk());
-    navigate("/login");
+    await dispatch(logoutThunk(() => navigate("/login")));
   };
   return (
     <div className={styles.main}>

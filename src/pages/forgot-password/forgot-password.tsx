@@ -2,7 +2,7 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { FC, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import styles from "../login/login.module.css";
@@ -14,12 +14,14 @@ export const ForgotPassword: FC = () => {
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = async () => {
-    await dispatch(getResetCodeThunk(formValue.email));
-    navigate("/reset-password");
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    await dispatch(
+      getResetCodeThunk(formValue.email, () => navigate("/reset-password"))
+    );
   };
   return (
-    <div className={styles.main}>
+    <div className={styles.main} onSubmit={onSubmit}>
       <form className={styles.form}>
         <p className={`${styles.title} text text_type_main-medium mb-6`}>
           Восстановление пароля
@@ -37,11 +39,10 @@ export const ForgotPassword: FC = () => {
           extraClass="mb-6"
         />
         <Button
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
           extraClass="mb-20"
-          onClick={onSubmit}
         >
           Восстановить
         </Button>
