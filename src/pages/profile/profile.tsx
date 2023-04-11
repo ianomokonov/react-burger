@@ -20,7 +20,8 @@ export const Profile: FC = () => {
               isActive ? "" : styles.text_color_inactive
             }`
           }
-          to="/profile"
+          to="/profile/"
+          
         >
           Профиль
         </NavLink>
@@ -30,7 +31,7 @@ export const Profile: FC = () => {
               isActive ? "" : styles.text_color_inactive
             }`
           }
-          to="/orders-history"
+          to="/profile/orders"
         >
           История заказов
         </NavLink>

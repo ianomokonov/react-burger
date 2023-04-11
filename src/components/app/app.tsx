@@ -32,6 +32,7 @@ const App: FC = () => {
             element={<ProtectedRoute element={<Profile />} />}
           >
             <Route index element={<EditForm />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="ingredients/:id" element={<Ingredient />} />
           <Route path="*" element={<NotFound />} />
