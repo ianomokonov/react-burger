@@ -3,7 +3,7 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "../login/login.module.css";
 import { useTypedDispatch } from "redux/hooks";
 import { createUserThunk } from "redux/user/thunks";
@@ -17,10 +17,17 @@ export const Register: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onBtnClick = async (e: FormEvent) => {
     e.preventDefault();
-    await dispatch(createUserThunk(formValue, () => navigate("/profile")));
+    await dispatch(
+      createUserThunk(formValue, () =>
+        location.state?.redirectUrl
+          ? navigate(location.state.redirectUrl)
+          : navigate("/profile")
+      )
+    );
   };
   return (
     <div className={styles.main}>
@@ -79,7 +86,9 @@ export const Register: FC = () => {
             <span className="text text_type_main-default text_color_inactive mr-2">
               Уже зарегистрированы?
             </span>
-            <Link to={"/login"}>Войти</Link>
+            <Link to={"/login"} state={location.state}>
+              Войти
+            </Link>
           </div>
         </div>
       </form>

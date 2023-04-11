@@ -20,6 +20,8 @@ import { ConstructorIngredient } from "interfaces/constructor-ingredient";
 import { DragIngredient } from "./drag-ingredient/drag-ingredient";
 import { Modal } from "components/modal/modal";
 import { OrderDetails } from "./order-details/order-details";
+import { getUser } from "redux/selectors";
+import { useNavigate } from "react-router-dom";
 
 const getConstructorData = (state: RootState) => ({
   bun: state.constructorData.bun,
@@ -31,7 +33,11 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
   const { bun, ingredients, allIngredients } =
     useTypedSelector(getConstructorData);
 
+  const { profile } = useTypedSelector(getUser);
+
   const dispatch = useTypedDispatch();
+
+  const navigate = useNavigate();
 
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
 
@@ -108,6 +114,12 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     if (!bun) {
       return;
     }
+
+    if (!profile) {
+      navigate("/login", { state: { redirectUrl: "/" } });
+      return;
+    }
+
     await dispatch(
       makeOrderThunk([
         bun._id,

@@ -4,7 +4,7 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTypedDispatch } from "redux/hooks";
 import { loginThunk } from "redux/user/thunks";
 
@@ -13,10 +13,17 @@ export const Login: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useTypedDispatch();
   const navidate = useNavigate();
+  const location = useLocation();
 
   const login = async (e: FormEvent) => {
     e.preventDefault();
-    await dispatch(loginThunk(formValue, () => navidate("/profile")));
+    await dispatch(
+      loginThunk(formValue, () =>
+        location.state?.redirectUrl
+          ? navidate(location.state.redirectUrl)
+          : navidate("/profile")
+      )
+    );
   };
   return (
     <div className={styles.main}>
@@ -63,7 +70,9 @@ export const Login: FC = () => {
             <span className="text text_type_main-default text_color_inactive mr-2">
               Вы — новый пользователь?
             </span>
-            <Link to={"/register"}>Зарегистрироваться</Link>
+            <Link to={"/register"} state={location.state}>
+              Зарегистрироваться
+            </Link>
           </div>
           <div className={styles.action}>
             <span className="text text_type_main-default text_color_inactive mr-2">
