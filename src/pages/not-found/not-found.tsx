@@ -1,16 +1,9 @@
 import { FC } from "react";
+import styles from "./not-found.module.css";
 
 export const NotFound: FC = () => {
   return (
-    <div
-      className="text text_type_main-large"
-      style={{
-        height: "calc(100vh - var(--offset-base-size) * 24)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <div className={`text text_type_main-large ${styles.container}`}>
       Страница не найдена
     </div>
   );

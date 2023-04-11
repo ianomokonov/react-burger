@@ -162,18 +162,13 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
           <div className="pl-8">
             <div
               ref={topBunDropRef}
-              className="constructor-element constructor-element_pos_top mb-4"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderWidth: "2px",
-                borderStyle: "dashed",
-                borderColor:
-                  isTopBunHovered || isBottomBunHovered
-                    ? "var(--colors-interface-accent)"
-                    : "transparent",
-              }}
+              className={`constructor-element constructor-element_pos_top mb-4 centered ${
+                styles.bun_empty
+              } ${
+                isTopBunHovered || isBottomBunHovered
+                  ? styles.dropable_hover
+                  : ""
+              }`}
             >
               <span>Выберите булку</span>
             </div>
@@ -182,17 +177,9 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
 
         <div
           ref={itemsDropRef}
-          style={{
-            borderWidth: "2px",
-            borderStyle: "dashed",
-            borderColor:
-              isItemsHovered && !ingredients.length
-                ? "var(--colors-interface-accent)"
-                : "transparent",
-          }}
           className={`${styles.main} custom-scroll ${
             ingredients.length ? "" : styles.main_empty
-          }`}
+          } ${isItemsHovered ? styles.dropable_hover : ""}`}
         >
           {ingredients.length ? (
             ingredients.map((ingredient, index) =>
@@ -220,18 +207,13 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
           <div className="pl-8 mb-10">
             <div
               ref={bottomBunDropRef}
-              className="constructor-element constructor-element_pos_bottom mt-4"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderWidth: "2px",
-                borderStyle: "dashed",
-                borderColor:
-                  isTopBunHovered || isBottomBunHovered
-                    ? "var(--colors-interface-accent)"
-                    : "transparent",
-              }}
+              className={`constructor-element constructor-element_pos_bottom mt-4 centered ${
+                styles.bun_empty
+              } ${
+                isTopBunHovered || isBottomBunHovered
+                  ? styles.bun_empty_hover
+                  : ""
+              }`}
             >
               <span>Выберите булку</span>
             </div>

@@ -30,3 +30,7 @@
 .content {
   padding-left: calc(var(--offset-base-size) * 15);
 }
+
+.page__description {
+  opacity: 0.4;
+}

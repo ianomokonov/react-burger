@@ -94,7 +94,7 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   }, []);
   return (
     <div className={`${className} pb-4`}>
-      <div className="pb-10" style={{ display: "flex" }} ref={tabsRef}>
+      <div className="pb-10 d-flex" ref={tabsRef}>
         <Tab
           value={IngredientType.Bun}
           active={currentIngredient === IngredientType.Bun}

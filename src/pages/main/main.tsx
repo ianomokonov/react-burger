@@ -5,7 +5,7 @@ import { FC, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useTypedDispatch, useTypedSelector } from "redux/hooks";
-import { getIngredientsThank } from "redux/ingredients/thunks";
+import { getIngredientsThunk } from "redux/ingredients/thunks";
 import { getIngredients } from "redux/selectors";
 import styles from "./main.module.css";
 
@@ -17,7 +17,7 @@ export const Main: FC = () => {
     if (ingredients?.length) {
       return;
     }
-    dispatch(getIngredientsThank());
+    dispatch(getIngredientsThunk());
   }, [dispatch, ingredients]);
 
   if (isLoading) {

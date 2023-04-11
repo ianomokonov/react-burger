@@ -41,8 +41,7 @@ export const Profile: FC = () => {
           Выход
         </span>
         <span
-          className="text text_type_main-default"
-          style={{ opacity: "0.4" }}
+          className={`text text_type_main-default ${styles.page__description}`}
         >
           В этом разделе вы можете изменить свои персональные данные
         </span>

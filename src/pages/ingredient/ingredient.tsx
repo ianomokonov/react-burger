@@ -1,11 +1,12 @@
 import { IngredientDetails } from "components/burger-ingredients/ingredients-category/ingredient-details/ingredient-details";
 import { FC, useEffect } from "react";
 import { useTypedDispatch, useTypedSelector } from "redux/hooks";
-import { getIngredientsThank } from "redux/ingredients/thunks";
+import { getIngredientsThunk } from "redux/ingredients/thunks";
 import { getIngredients } from "redux/selectors";
-import styles from "../main/main.module.css";
+import mainStyles from "../main/main.module.css";
 import { Loader } from "components/loader/loader";
 import { Navigate, useParams } from "react-router-dom";
+import styles from "./ingredient.module.css";
 
 export const Ingredient: FC = () => {
   const { ingredients, isLoading } = useTypedSelector(getIngredients);
@@ -16,12 +17,12 @@ export const Ingredient: FC = () => {
     if (ingredients?.length) {
       return;
     }
-    dispatch(getIngredientsThank());
+    dispatch(getIngredientsThunk());
   }, [dispatch, ingredients]);
 
   if (!ingredients?.length || isLoading) {
     return (
-      <div className={styles.loading}>
+      <div className={mainStyles.loading}>
         <Loader />
       </div>
     );
@@ -31,15 +32,9 @@ export const Ingredient: FC = () => {
     return <Navigate to={"/not-found"} />;
   }
   return (
-    <div
-      className="centered"
-      style={{
-        flexDirection: "column",
-        paddingTop: "calc(var(--offset-base-size) * 30)",
-      }}
-    >
+    <div className={`centered ${styles.container}`}>
       <p className="text text_type_main-large">Детали ингредиента</p>
-      <div style={{ maxWidth: "calc(var(--offset-base-size) * 160)" }}>
+      <div className={styles.ingredient}>
         <IngredientDetails />
       </div>
     </div>
