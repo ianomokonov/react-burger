@@ -1,8 +1,8 @@
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { IngredientType } from "interfaces/ingredient-type";
 import { FC, useCallback, useMemo, useRef, useState } from "react";
-import { IngredientType } from "../../interfaces/ingredient-type";
-import { useTypedSelector } from "../../redux/hooks";
-import { getIngredients } from "../../redux/selectors";
+import { useTypedSelector } from "redux/hooks";
+import { getIngredients } from "redux/selectors";
 import styles from "./burger-ingredients.module.css";
 import { BurgerIngredientsProps } from "./burger-ingredients.props";
 import { IngredientsCategory } from "./ingredients-category/ingredients-category";
@@ -23,8 +23,6 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
     setCurrentIngredient(type);
     switch (type) {
       case IngredientType.Bun: {
-        console.log(bunsRef.current);
-
         bunsRef.current?.scrollIntoView(true);
         return;
       }
@@ -96,7 +94,7 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   }, []);
   return (
     <div className={`${className} pb-4`}>
-      <div className="pb-10" style={{ display: "flex" }} ref={tabsRef}>
+      <div className="pb-10 d-flex" ref={tabsRef}>
         <Tab
           value={IngredientType.Bun}
           active={currentIngredient === IngredientType.Bun}

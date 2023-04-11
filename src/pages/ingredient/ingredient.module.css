@@ -1,0 +1,8 @@
+.container {
+  flex-direction: column;
+  padding-top: calc(var(--offset-base-size) * 30);
+}
+
+.ingredient {
+  max-width: calc(var(--offset-base-size) * 160);
+}

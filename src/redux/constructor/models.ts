@@ -1,5 +1,5 @@
-import { BurgerIngredient } from "../../interfaces/burger-ingredient";
-import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
+import { BurgerIngredient } from "interfaces/burger-ingredient";
+import { ConstructorIngredient } from "interfaces/constructor-ingredient";
 
 export interface ConstructorState {
   ingredients: ConstructorIngredient[];

@@ -1,4 +1,5 @@
-import { makeOrder } from "../../utils/data-access";
+
+import { makeOrder } from "utils/data-access";
 import { DispatchType } from "../store";
 import {
   orderNumberError,

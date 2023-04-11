@@ -1,47 +1,60 @@
-import { AppHeader } from "../app-header/app-header";
-import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
-import { BurgerContructor } from "../burger-constructor/burger-constructor";
-import styles from "./app.module.css";
-import { FC, useEffect } from "react";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
-import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
-import { getIngredientsThank } from "../../redux/ingredients/thunks";
-import { Loader } from "../loader/loader";
-import { getIngredients } from "../../redux/selectors";
+import { FC } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { ForgotPassword } from "pages/forgot-password/forgot-password";
+import { Ingredient } from "pages/ingredient/ingredient";
+import { Login } from "pages/login/login";
+import { Main } from "pages/main/main";
+import { NotFound } from "pages/not-found/not-found";
+import { EditForm } from "pages/profile/edit-form/edit-form";
+import { Profile } from "pages/profile/profile";
+import { Register } from "pages/register/register";
+import { ResetPassword } from "pages/reset-password/reset-password";
+import { Layout } from "components/layout/layout";
+import { Modal } from "components/modal/modal";
+import { IngredientDetails } from "components/burger-ingredients/ingredients-category/ingredient-details/ingredient-details";
+import { ProtectedRoute } from "components/protected-route/protected-route";
 
 const App: FC = () => {
-  const { ingredients, isLoading } = useTypedSelector(getIngredients);
-
-  const dispatch = useTypedDispatch();
-  useEffect(() => {
-    dispatch(getIngredientsThank());
-  }, [dispatch]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const state = location.state;
   return (
-    <div className="App">
-      <AppHeader />
-      <main
-        className={`container pt-10 pl-5 pr-5 ${
-          isLoading ? styles.loading : ""
-        }`}
-      >
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
-            {!!ingredients.length && (
-              <div className={styles.content}>
-                <DndProvider backend={HTML5Backend}>
-                  <BurgerIngredients />
-                  <BurgerContructor />
-                </DndProvider>
-              </div>
-            )}
-          </>
-        )}
-      </main>
-    </div>
+    <>
+      <Routes location={state?.background || location}>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Main />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="profile"
+            element={<ProtectedRoute element={<Profile />} />}
+          >
+            <Route index element={<EditForm />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+          <Route path="ingredients/:id" element={<Ingredient />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+
+      {state?.background && (
+        <Routes>
+          <Route
+            path="ingredients/:id"
+            element={
+              <Modal
+                title="Детали ингредиента"
+                onClose={() => navigate(state.background)}
+              >
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+    </>
   );
 };
 

@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BurgerIngredient } from "../../interfaces/burger-ingredient";
 import {
   AddIngredientAction,
   ConstructorState,
   UpdateOrderAction,
 } from "./models";
 import { v4 as uuidv4 } from "uuid";
-import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
-import { IngredientType } from "../../interfaces/ingredient-type";
+import { BurgerIngredient } from "interfaces/burger-ingredient";
+import { IngredientType } from "interfaces/ingredient-type";
+import { ConstructorIngredient } from "interfaces/constructor-ingredient";
 
 const initialState: ConstructorState = {
   ingredients: [],

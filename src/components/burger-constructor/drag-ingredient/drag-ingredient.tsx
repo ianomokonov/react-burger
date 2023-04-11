@@ -6,8 +6,8 @@ import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { DragIngredientProps } from "./drag-ingredient.props";
 import { useDrag, useDrop } from "react-dnd";
 import type { XYCoord } from "dnd-core";
-import { useTypedDispatch } from "../../../redux/hooks";
-import { updateOrder } from "../../../redux/constructor/constructor.slice";
+import { useTypedDispatch } from "redux/hooks";
+import { updateOrder } from "redux/constructor/constructor.slice";
 
 export const DragIngredient: FC<DragIngredientProps> = ({
   className,

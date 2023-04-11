@@ -6,20 +6,22 @@ import {
 import { BurgerConstructorProps } from "./burger-constructor.props";
 import styles from "./burger-constructor.module.css";
 import { FC, useCallback, useMemo, useState } from "react";
-import { Modal } from "../modal/modal";
-import { OrderDetails } from "./order-details/order-details";
-import { useTypedDispatch, useTypedSelector } from "../../redux/hooks";
 import { useDrop } from "react-dnd";
+import { RootState } from "redux/store";
+import { useTypedDispatch, useTypedSelector } from "redux/hooks";
+import { IngredientType } from "interfaces/ingredient-type";
 import {
   addIngredient,
   removeIngredient,
   setBun,
-} from "../../redux/constructor/constructor.slice";
-import { ConstructorIngredient } from "../../interfaces/constructor-ingredient";
-import { IngredientType } from "../../interfaces/ingredient-type";
+} from "redux/constructor/constructor.slice";
+import { makeOrderThunk } from "redux/order/thunks";
+import { ConstructorIngredient } from "interfaces/constructor-ingredient";
 import { DragIngredient } from "./drag-ingredient/drag-ingredient";
-import { makeOrderThunk } from "../../redux/order/thunks";
-import { RootState } from "../../redux/store";
+import { Modal } from "components/modal/modal";
+import { OrderDetails } from "./order-details/order-details";
+import { getUser } from "redux/selectors";
+import { useNavigate } from "react-router-dom";
 
 const getConstructorData = (state: RootState) => ({
   bun: state.constructorData.bun,
@@ -31,7 +33,11 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
   const { bun, ingredients, allIngredients } =
     useTypedSelector(getConstructorData);
 
+  const { profile } = useTypedSelector(getUser);
+
   const dispatch = useTypedDispatch();
+
+  const navigate = useNavigate();
 
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
 
@@ -108,6 +114,12 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     if (!bun) {
       return;
     }
+
+    if (!profile) {
+      navigate("/login", { state: { redirectUrl: "/" } });
+      return;
+    }
+
     await dispatch(
       makeOrderThunk([
         bun._id,
@@ -162,18 +174,13 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
           <div className="pl-8">
             <div
               ref={topBunDropRef}
-              className="constructor-element constructor-element_pos_top mb-4"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderWidth: "2px",
-                borderStyle: "dashed",
-                borderColor:
-                  isTopBunHovered || isBottomBunHovered
-                    ? "var(--colors-interface-accent)"
-                    : "transparent",
-              }}
+              className={`constructor-element constructor-element_pos_top mb-4 centered ${
+                styles.bun_empty
+              } ${
+                isTopBunHovered || isBottomBunHovered
+                  ? styles.dropable_hover
+                  : ""
+              }`}
             >
               <span>Выберите булку</span>
             </div>
@@ -182,17 +189,9 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
 
         <div
           ref={itemsDropRef}
-          style={{
-            borderWidth: "2px",
-            borderStyle: "dashed",
-            borderColor:
-              isItemsHovered && !ingredients.length
-                ? "var(--colors-interface-accent)"
-                : "transparent",
-          }}
           className={`${styles.main} custom-scroll ${
             ingredients.length ? "" : styles.main_empty
-          }`}
+          } ${isItemsHovered ? styles.dropable_hover : ""}`}
         >
           {ingredients.length ? (
             ingredients.map((ingredient, index) =>
@@ -220,18 +219,13 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
           <div className="pl-8 mb-10">
             <div
               ref={bottomBunDropRef}
-              className="constructor-element constructor-element_pos_bottom mt-4"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderWidth: "2px",
-                borderStyle: "dashed",
-                borderColor:
-                  isTopBunHovered || isBottomBunHovered
-                    ? "var(--colors-interface-accent)"
-                    : "transparent",
-              }}
+              className={`constructor-element constructor-element_pos_bottom mt-4 centered ${
+                styles.bun_empty
+              } ${
+                isTopBunHovered || isBottomBunHovered
+                  ? styles.bun_empty_hover
+                  : ""
+              }`}
             >
               <span>Выберите булку</span>
             </div>

@@ -1,4 +1,4 @@
-import { getIngredients } from "../../utils/data-access";
+import { getIngredients } from "utils/data-access";
 import { DispatchType } from "../store";
 import {
   ingredientsError,
@@ -6,7 +6,7 @@ import {
   ingredientsSuccess,
 } from "./ingredients.slice";
 
-export const getIngredientsThank = () => (dispatch: DispatchType) => {
+export const getIngredientsThunk = () => (dispatch: DispatchType) => {
   dispatch(ingredientsRequest());
   getIngredients()
     .then(({ data }) => {
