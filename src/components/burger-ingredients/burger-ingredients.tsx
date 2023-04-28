@@ -38,7 +38,7 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   };
   const getCategoryIngredients = useCallback(
     (type: IngredientType) =>
-      ingredients.filter((d) => (d.type as IngredientType) === type),
+      ingredients.filter((d) => d.type === type),
     [ingredients]
   );
   const buns = useMemo(
