@@ -23,6 +23,7 @@ import { OrderDetails } from "./order-details/order-details";
 import { getUser } from "redux/selectors";
 import { useNavigate } from "react-router-dom";
 
+/** получить данные конструктора */
 const getConstructorData = (state: RootState) => ({
   bun: state.constructorData.bun,
   ingredients: state.constructorData.ingredients,
