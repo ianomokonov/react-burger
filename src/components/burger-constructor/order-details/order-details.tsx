@@ -8,7 +8,7 @@ export const OrderDetails: FC = () => {
   const { orderNumber } = useTypedSelector(getOrder);
   return (
     <div className={styles.order}>
-      <p className={`${styles.order__number} text text_type_digits-large mb-8`}>
+      <p className={`text text_type_digits-large mb-8 neon-text`}>
         {orderNumber}
       </p>
       <p className="mb-15 text text_type_main-medium">идентификатор заказа</p>

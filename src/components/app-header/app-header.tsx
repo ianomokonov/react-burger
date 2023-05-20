@@ -16,7 +16,7 @@ export const AppHeader: FC = () => {
           <MenuItem to="/" icon={BurgerIcon}>
             Конструктор
           </MenuItem>
-          <MenuItem to="/orders" icon={ListIcon}>
+          <MenuItem to="/feed" icon={ListIcon}>
             Лента заказов
           </MenuItem>
         </div>

@@ -1,0 +1,61 @@
+.order {
+  background-color: var(--background);
+  border-radius: calc(var(--offset-base-size) * 10);
+}
+
+.ingredients {
+  counter-reset: ingredient;
+}
+
+.ingredient {
+  height: calc(var(--offset-base-size) * 16);
+  width: calc(var(--offset-base-size) * 16);
+  background-position: center;
+  background-size: auto 70%;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  border: 2px solid var(--colors-interface-accent);
+  position: relative;
+  counter-increment: ingredient;
+  background-color: var(--background-alt);
+  z-index: 7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ingredient:nth-child(2) {
+  left: calc(1 * -16px);
+  z-index: 6;
+}
+
+.ingredient:nth-child(3) {
+  left: calc(2 * -16px);
+  z-index: 5;
+}
+
+.ingredient:nth-child(4) {
+  left: calc(3 * -16px);
+  z-index: 4;
+}
+
+.ingredient:nth-child(5) {
+  left: calc(4 * -16px);
+  z-index: 3;
+}
+
+.ingredient:nth-child(6) {
+  left: calc(5 * -16px);
+  z-index: 2;
+}
+
+.ingredient span {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

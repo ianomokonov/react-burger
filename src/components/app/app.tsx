@@ -13,6 +13,7 @@ import { Layout } from "components/layout/layout";
 import { Modal } from "components/modal/modal";
 import { IngredientDetails } from "components/burger-ingredients/ingredients-category/ingredient-details/ingredient-details";
 import { ProtectedRoute } from "components/protected-route/protected-route";
+import { Feed } from "pages/feed/feed";
 
 const App: FC = () => {
   const location = useLocation();
@@ -35,6 +36,7 @@ const App: FC = () => {
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="ingredients/:id" element={<Ingredient />} />
+          <Route path="feed" element={<Feed />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
