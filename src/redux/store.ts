@@ -1,18 +1,46 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { constructorReducer } from "./constructor/constructor.slice";
 import { ingredientsReducer } from "./ingredients/ingredients.slice";
 import { orderReducer } from "./order/order.slice";
 import { userReducer } from "./user/user.slice";
+import {
+  close,
+  connect,
+  connecting,
+  disconnect,
+  feedReducer,
+  onError,
+  onMessage,
+  onOpen,
+  sendMessage,
+} from "./feed/feed.slice";
+import { socketMiddleware } from "./middleware/socket-middleware";
 
-export const store = configureStore({
-  reducer: {
-    ingredients: ingredientsReducer,
-    constructorData: constructorReducer,
-    order: orderReducer,
-    user: userReducer,
-  },
-  devTools: process.env.NODE_ENV !== "production",
+const reducer = combineReducers({
+  ingredients: ingredientsReducer,
+  constructorData: constructorReducer,
+  order: orderReducer,
+  user: userReducer,
+  feed: feedReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export const store = configureStore({
+  reducer,
+  devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      socketMiddleware({
+        connect: connect,
+        connecting: connecting,
+        disconnect: disconnect,
+        sendMessage: sendMessage,
+        onOpen: onOpen,
+        onClose: close,
+        onError: onError,
+        onMessage: onMessage,
+      })
+    ),
+});
+
+export type RootState = ReturnType<typeof reducer>;
 export type DispatchType = typeof store.dispatch;

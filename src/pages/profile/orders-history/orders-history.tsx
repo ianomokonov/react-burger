@@ -5,7 +5,7 @@ import styles from "./orders-history.module.css";
 export const OrdersHistory: FC = () => {
   return (
     <div className={`${styles.content} pt-10`}>
-      <Orders modalUrl="/profile/orders" />
+      <Orders modalUrl="/profile/orders" orders={[]} />
     </div>
   );
 };
