@@ -48,6 +48,20 @@ export const OrderInfo: FC = () => {
     );
   }, [orderIngredients]);
 
+  const getStatus = () => {
+    switch (activeOrder?.status) {
+      case "done": {
+        return "Выполнен";
+      }
+      case "created": {
+        return "Создан";
+      }
+      default: {
+        return "Готовится";
+      }
+    }
+  };
+
   return (
     <>
       {!!activeOrder && (
@@ -67,7 +81,7 @@ export const OrderInfo: FC = () => {
                   activeOrder.status === "done" ? "success-text" : ""
                 }`}
               >
-                {activeOrder.status === "done" ? "Выполнен" : "В работе"}
+                {getStatus()}
               </span>
             </div>
             <div className="mb-10">
