@@ -21,7 +21,6 @@ export const Feed: FC = () => {
     if (allIngredients?.length) {
       return;
     }
-    console.log(allIngredients);
 
     dispatch(getIngredientsThunk());
   }, [allIngredients, dispatch]);
