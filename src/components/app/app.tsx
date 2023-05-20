@@ -15,6 +15,7 @@ import { IngredientDetails } from "components/burger-ingredients/ingredients-cat
 import { ProtectedRoute } from "components/protected-route/protected-route";
 import { Feed } from "pages/feed/feed";
 import { OrderInfo } from "components/orders/order-info/order-info";
+import { OrdersHistory } from "pages/profile/orders-history/orders-history";
 
 const App: FC = () => {
   const location = useLocation();
@@ -34,6 +35,7 @@ const App: FC = () => {
             element={<ProtectedRoute element={<Profile />} />}
           >
             <Route index element={<EditForm />} />
+            <Route path='orders' element={<OrdersHistory />} />
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="ingredients/:id" element={<Ingredient />} />

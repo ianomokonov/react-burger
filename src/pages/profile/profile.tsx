@@ -1,12 +1,23 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import styles from "./profile.module.css";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTypedDispatch } from "redux/hooks";
 import { logoutThunk } from "redux/user/thunks";
 
 export const Profile: FC = () => {
   const navigate = useNavigate();
   const dispatch = useTypedDispatch();
+  const location = useLocation();
+
+  const label = useMemo(() => {
+    if (location.state?.label) {
+      return location.state?.label;
+    }
+
+    return location.pathname.includes("orders")
+      ? "В этом разделе вы можете просмотреть свою историю заказов"
+      : "В этом разделе вы можете изменить свои персональные данные";
+  }, [location.pathname, location.state]);
 
   const logout = async () => {
     await dispatch(logoutThunk(() => navigate("/login")));
@@ -21,7 +32,9 @@ export const Profile: FC = () => {
             }`
           }
           to="/profile/"
-          
+          state={{
+            label: "В этом разделе вы можете изменить свои персональные данные",
+          }}
         >
           Профиль
         </NavLink>
@@ -32,6 +45,9 @@ export const Profile: FC = () => {
             }`
           }
           to="/profile/orders"
+          state={{
+            label: "В этом разделе вы можете просмотреть свою историю заказов",
+          }}
         >
           История заказов
         </NavLink>
@@ -44,7 +60,7 @@ export const Profile: FC = () => {
         <span
           className={`text text_type_main-default ${styles.page__description}`}
         >
-          В этом разделе вы можете изменить свои персональные данные
+          {label}
         </span>
       </div>
       <div className={styles.content}>

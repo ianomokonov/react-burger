@@ -58,11 +58,15 @@ export const loginThunk = (loginData: LoginRequest, callback: () => void) => {
   };
 };
 
-export const createUserThunk = (createUserData: CreateUserRequest, callback: () => void) => {
+export const createUserThunk = (
+  createUserData: CreateUserRequest,
+  callback: () => void
+) => {
   return async (dispatch: DispatchType) => {
     try {
       const user = await createUser(createUserData);
       dispatch(setProfileInfo(user));
+      callback();
     } catch (error: any) {
       dispatch(setUserErrorMessage(error.message as string));
       console.error(error);
@@ -75,6 +79,7 @@ export const logoutThunk = (callback: () => void) => {
     try {
       await logout();
       dispatch(setProfileInfo(null));
+      callback();
     } catch (error: any) {
       dispatch(setUserErrorMessage(error.message as string));
       console.error(error);
@@ -87,6 +92,7 @@ export const getResetCodeThunk = (email: string, callback: () => void) => {
     try {
       await resetPassword(email);
       dispatch(setResetEmail(email));
+      callback();
     } catch (error: any) {
       dispatch(setUserErrorMessage(error.message as string));
       console.error(error);
@@ -94,11 +100,16 @@ export const getResetCodeThunk = (email: string, callback: () => void) => {
   };
 };
 
-export const resetPasswordThunk = (password: string, token: string, callback: () => void) => {
+export const resetPasswordThunk = (
+  password: string,
+  token: string,
+  callback: () => void
+) => {
   return async (dispatch: DispatchType) => {
     try {
       await resetPasswordWithCode(token, password);
       dispatch(setResetEmail(null));
+      callback();
     } catch (error: any) {
       dispatch(setUserErrorMessage(error.message as string));
       console.error(error);
