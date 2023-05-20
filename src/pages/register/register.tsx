@@ -25,7 +25,7 @@ export const Register: FC = () => {
       createUserThunk(formValue, () =>
         location.state?.redirectUrl
           ? navigate(location.state.redirectUrl)
-          : navigate("/profile")
+          : navigate("/profile/")
       )
     );
   };

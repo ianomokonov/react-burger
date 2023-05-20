@@ -21,7 +21,7 @@ export const Login: FC = () => {
       loginThunk(formValue, () =>
         location.state?.redirectUrl
           ? navidate(location.state.redirectUrl)
-          : navidate("/profile")
+          : navidate("/profile/")
       )
     );
   };

@@ -35,7 +35,8 @@ const App: FC = () => {
             element={<ProtectedRoute element={<Profile />} />}
           >
             <Route index element={<EditForm />} />
-            <Route path='orders' element={<OrdersHistory />} />
+            <Route path="orders" element={<OrdersHistory />} />
+            <Route path="orders/:id" element={<OrderInfo />} />
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="ingredients/:id" element={<Ingredient />} />
@@ -69,6 +70,21 @@ const App: FC = () => {
               </Modal>
             }
           />
+          <Route
+            path="profile/orders/:id"
+            element={
+              <ProtectedRoute
+                element={
+                  <Modal
+                    title={"#" + state.orderNumber}
+                    onClose={() => navigate(state.background)}
+                  >
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
+            }
+          ></Route>
         </Routes>
       )}
     </>

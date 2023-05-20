@@ -22,7 +22,7 @@ export const AppHeader: FC = () => {
         </div>
         <Logo />
         <div className={styles.links}>
-          <MenuItem to="/profile" icon={ProfileIcon}>
+          <MenuItem to="/profile/" icon={ProfileIcon}>
             Личный кабинет
           </MenuItem>
         </div>

@@ -9,7 +9,7 @@ export const Feed: FC = () => {
       <h2 className="text text_type_main-large mb-5">Лента заказов</h2>
       <div className={`d-flex ${styles.content}`}>
         <div className="col h-100">
-          <Orders />
+          <Orders modalUrl="/feed" />
         </div>
         <div className="col pl-15">
           <Statistics />

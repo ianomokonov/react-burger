@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Order } from "./order/order";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export const Orders: FC = () => {
+export const Orders: FC<{ modalUrl: string }> = ({ modalUrl }) => {
   const navigate = useNavigate();
   const location = useLocation();
   return (
@@ -10,7 +10,7 @@ export const Orders: FC = () => {
       <Order
         className="mb-4"
         onClick={() =>
-          navigate(`/feed/${1}`, {
+          navigate(`${modalUrl}/${1}`, {
             state: { background: location, orderNumber: "1234567" },
           })
         }
