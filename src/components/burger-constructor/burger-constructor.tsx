@@ -121,7 +121,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
       return;
     }
 
-    await dispatch(
+    dispatch(
       makeOrderThunk([
         bun._id,
         bun._id,
