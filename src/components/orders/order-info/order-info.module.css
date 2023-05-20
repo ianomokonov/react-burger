@@ -1,0 +1,28 @@
+.ingredients {
+  max-height: calc(var(--offset-base-size) * 79);
+  overflow: auto;
+}
+
+.ingredient {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredient__img {
+  height: calc(var(--offset-base-size) * 16);
+  width: calc(var(--offset-base-size) * 16);
+  background-position: center;
+  background-size: auto 70%;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  border: 2px solid var(--colors-interface-accent);
+  background-color: var(--background-alt);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container{
+    width: calc(var(--offset-base-size) * 160);
+}

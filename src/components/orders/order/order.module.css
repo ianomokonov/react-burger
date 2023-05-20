@@ -16,7 +16,6 @@
   border-radius: 50%;
   border: 2px solid var(--colors-interface-accent);
   position: relative;
-  counter-increment: ingredient;
   background-color: var(--background-alt);
   z-index: 7;
   display: flex;

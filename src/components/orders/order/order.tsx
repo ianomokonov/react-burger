@@ -2,7 +2,7 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { FC } from "react";
 import styles from "./order.module.css";
 
-export const Order: FC<{ className?: string }> = ({ className }) => {
+export const Order: FC<{ className?: string, onClick?: () => void }> = ({ className, onClick }) => {
   const ingredients = [
     {
       id: 1,
@@ -38,7 +38,7 @@ export const Order: FC<{ className?: string }> = ({ className }) => {
     },
   ];
   return (
-    <div className={`p-6 ${styles.order} ${className}`}>
+    <div className={`p-6 ${styles.order} ${className}`} onClick={onClick}>
       <div className="d-flex justify-content-between mb-6 align-items-center">
         <span className="text text_type_digits-default">#122344</span>
         <span className="text text_type_main-default text_color_inactive">

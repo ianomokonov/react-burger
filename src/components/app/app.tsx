@@ -14,6 +14,7 @@ import { Modal } from "components/modal/modal";
 import { IngredientDetails } from "components/burger-ingredients/ingredients-category/ingredient-details/ingredient-details";
 import { ProtectedRoute } from "components/protected-route/protected-route";
 import { Feed } from "pages/feed/feed";
+import { OrderInfo } from "components/orders/order-info/order-info";
 
 const App: FC = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ const App: FC = () => {
           </Route>
           <Route path="ingredients/:id" element={<Ingredient />} />
           <Route path="feed" element={<Feed />} />
+          <Route path="feed/:id" element={<OrderInfo />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
@@ -51,6 +53,17 @@ const App: FC = () => {
                 onClose={() => navigate(state.background)}
               >
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="feed/:id"
+            element={
+              <Modal
+                title={"#" + state.orderNumber}
+                onClose={() => navigate(state.background)}
+              >
+                <OrderInfo />
               </Modal>
             }
           />
