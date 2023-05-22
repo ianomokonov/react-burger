@@ -10,7 +10,6 @@ import {
   disconnect,
   feedReducer,
   onError,
-  onMessage,
   onOpen,
   sendMessage,
 } from "./feed/feed.slice";
@@ -28,7 +27,11 @@ export const store = configureStore({
   reducer,
   devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["FEED_CONNECT"],
+      },
+    }).concat(
       socketMiddleware({
         connect: connect,
         connecting: connecting,
@@ -37,7 +40,6 @@ export const store = configureStore({
         onOpen: onOpen,
         onClose: close,
         onError: onError,
-        onMessage: onMessage,
       })
     ),
 });

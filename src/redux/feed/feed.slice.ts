@@ -1,4 +1,4 @@
-import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
+import { ActionCreatorWithPayload, PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
 import { FeedMessage, FeedOrder } from "./models";
 
 export interface FeedState {
@@ -10,6 +10,11 @@ export interface FeedState {
   activeOrder?: FeedOrder;
   activeOrderLoading: boolean;
   activeOrderHasError: boolean;
+}
+
+export interface WSConnectPayload {
+  url: string;
+  onMessage: ActionCreatorWithPayload<any>
 }
 
 const initialState: FeedState = {
@@ -73,7 +78,7 @@ export const {
   activeOrderRequest,
   activeOrderSuccess,
 } = feedSlice.actions;
-export const connect = createAction<string, "FEED_CONNECT">("FEED_CONNECT");
+export const connect = createAction<WSConnectPayload, "FEED_CONNECT">("FEED_CONNECT");
 export const disconnect = createAction("FEED_DISCONNECT");
 export const close = createAction("FEED_CLOSE");
 export const sendMessage = createAction<any, "FEED_SEND_MESSAGE">(

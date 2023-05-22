@@ -3,7 +3,7 @@ import { Statistics } from "components/statistics/statistics";
 import { FC, useEffect } from "react";
 import styles from "./feed.module.css";
 import { useTypedDispatch, useTypedSelector } from "redux/hooks";
-import { connect, disconnect } from "redux/feed/feed.slice";
+import { connect, disconnect, onMessage } from "redux/feed/feed.slice";
 import { getFeed, getIngredients } from "redux/selectors";
 import { getIngredientsThunk } from "redux/ingredients/thunks";
 
@@ -11,7 +11,12 @@ export const Feed: FC = () => {
   const dispatch = useTypedDispatch();
   const { ingredients: allIngredients } = useTypedSelector(getIngredients);
   useEffect(() => {
-    dispatch(connect("wss://norma.nomoreparties.space/orders/all"));
+    dispatch(
+      connect({
+        url: "wss://norma.nomoreparties.space/orders/all",
+        onMessage: onMessage,
+      })
+    );
     return () => {
       dispatch(disconnect());
     };

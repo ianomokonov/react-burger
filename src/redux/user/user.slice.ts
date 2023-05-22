@@ -1,10 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ProfileState, UserState } from "./models";
+import { FeedMessage } from "redux/feed/models";
 
-const initialState: UserState = {};
+const initialState: UserState = { orders: [] };
 
 export const userSlice = createSlice({
-  name: "order",
+  name: "user",
   initialState: initialState,
   reducers: {
     setProfileInfo: (state, action: PayloadAction<ProfileState | null>) => {
@@ -16,10 +17,17 @@ export const userSlice = createSlice({
     setResetEmail: (state, action: PayloadAction<string | null>) => {
       state.resetEmail = action.payload;
     },
+    setUserOrders: (state, action: PayloadAction<FeedMessage>) => {
+      state.orders = action.payload.orders;
+    },
   },
 });
 
-export const { setProfileInfo, setUserErrorMessage, setResetEmail } =
-  userSlice.actions;
+export const {
+  setProfileInfo,
+  setUserErrorMessage,
+  setResetEmail,
+  setUserOrders,
+} = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
