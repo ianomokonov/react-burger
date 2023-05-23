@@ -1,0 +1,7 @@
+.numbers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--offset-base-size) * 2);
+    max-height: calc(var(--offset-base-size) * 40);
+    overflow: auto;
+}

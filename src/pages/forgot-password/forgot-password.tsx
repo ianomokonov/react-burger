@@ -16,6 +16,8 @@ export const ForgotPassword: FC = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    console.log(e);
+    
     await dispatch(
       getResetCodeThunk(formValue.email, () => navigate("/reset-password"))
     );

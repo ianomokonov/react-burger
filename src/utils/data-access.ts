@@ -6,6 +6,7 @@ import { getTokens, setTokens } from "./token";
 import { LoginRequest } from "./models/login.request";
 import { CreateUserRequest } from "./models/create-user.request";
 import { UpdateUserRequest } from "./models/update-user.request";
+import { FeedOrder } from "redux/feed/models";
 
 const checkReponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
@@ -62,6 +63,12 @@ const patch = <T>(url: string, body: T, withAuth = true) => {
 
 export const getIngredients = (): Promise<IngredientListResponse> => {
   return get(`${BASE_URL}/ingredients`);
+};
+
+export const getOrder = (id: number): Promise<FeedOrder> => {
+  return get(`${BASE_URL}/orders/${id}`).then((x) => {
+    return x.orders[0];
+  });
 };
 
 export const makeOrder = (ingredients: string[]) => {

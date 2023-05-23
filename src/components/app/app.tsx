@@ -13,6 +13,9 @@ import { Layout } from "components/layout/layout";
 import { Modal } from "components/modal/modal";
 import { IngredientDetails } from "components/burger-ingredients/ingredients-category/ingredient-details/ingredient-details";
 import { ProtectedRoute } from "components/protected-route/protected-route";
+import { Feed } from "pages/feed/feed";
+import { OrderInfo } from "components/orders/order-info/order-info";
+import { OrdersHistory } from "pages/profile/orders-history/orders-history";
 
 const App: FC = () => {
   const location = useLocation();
@@ -32,9 +35,13 @@ const App: FC = () => {
             element={<ProtectedRoute element={<Profile />} />}
           >
             <Route index element={<EditForm />} />
+            <Route path="orders" element={<OrdersHistory />} />
+            <Route path="orders/:id" element={<OrderInfo />} />
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="ingredients/:id" element={<Ingredient />} />
+          <Route path="feed" element={<Feed />} />
+          <Route path="feed/:id" element={<OrderInfo />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
@@ -52,6 +59,32 @@ const App: FC = () => {
               </Modal>
             }
           />
+          <Route
+            path="feed/:id"
+            element={
+              <Modal
+                title={"#" + state.orderNumber}
+                onClose={() => navigate(state.background)}
+              >
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path="profile/orders/:id"
+            element={
+              <ProtectedRoute
+                element={
+                  <Modal
+                    title={"#" + state.orderNumber}
+                    onClose={() => navigate(state.background)}
+                  >
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
+            }
+          ></Route>
         </Routes>
       )}
     </>

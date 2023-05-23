@@ -56,7 +56,7 @@ export const EditForm: FC = () => {
     );
   };
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="pt-30">
       <Input
         type={"text"}
         placeholder={"Имя"}

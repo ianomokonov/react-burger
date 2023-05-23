@@ -1,0 +1,4 @@
+.content {
+  height: calc(100vh - var(--offset-base-size) * 49);
+  padding-bottom: calc(var(--offset-base-size) * 4);
+}

@@ -5,10 +5,17 @@ import styles from "./order-details.module.css";
 import DoneImg from "images/done.svg";
 
 export const OrderDetails: FC = () => {
-  const { orderNumber } = useTypedSelector(getOrder);
+  const { orderNumber, orderNumberRequest } = useTypedSelector(getOrder);
+  if (orderNumberRequest) {
+    return (
+      <div className="centered pt-10 pb-10">
+        <p className="text text_type_main-medium"> Заказ выполняется...</p>
+      </div>
+    );
+  }
   return (
     <div className={styles.order}>
-      <p className={`${styles.order__number} text text_type_digits-large mb-8`}>
+      <p className={`text text_type_digits-large mb-8 neon-text`}>
         {orderNumber}
       </p>
       <p className="mb-15 text text_type_main-medium">идентификатор заказа</p>

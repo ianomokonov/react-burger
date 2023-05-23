@@ -1,5 +1,4 @@
 .main {
-  padding-top: calc(var(--offset-base-size) * 30);
   display: flex;
 }
 
@@ -7,6 +6,9 @@
   display: flex;
   flex-direction: column;
   width: calc(var(--offset-base-size) * 80);
+  min-width: calc(var(--offset-base-size) * 80);
+
+  padding-top: calc(var(--offset-base-size) * 30);
 }
 
 .text_color_inactive {
@@ -29,6 +31,7 @@
 
 .content {
   padding-left: calc(var(--offset-base-size) * 15);
+  flex-grow: 1;
 }
 
 .page__description {
