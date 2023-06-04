@@ -37,8 +37,7 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
     }
   };
   const getCategoryIngredients = useCallback(
-    (type: IngredientType) =>
-      ingredients.filter((d) => d.type === type),
+    (type: IngredientType) => ingredients.filter((d) => d.type === type),
     [ingredients]
   );
   const buns = useMemo(
@@ -118,6 +117,7 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
         </Tab>
       </div>
       <div
+        data-test="ingredients"
         className={`${styles.ingredients} custom-scroll`}
         onScroll={onScroll}
       >
