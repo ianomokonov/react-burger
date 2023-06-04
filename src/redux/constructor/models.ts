@@ -9,7 +9,7 @@ export interface ConstructorState {
 export interface UpdateOrderAction {
   currIndex: number;
   nextIndex: number;
-  id: string;
+  id?: string;
 }
 
 export interface AddIngredientAction {

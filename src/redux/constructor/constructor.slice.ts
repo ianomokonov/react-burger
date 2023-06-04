@@ -46,7 +46,7 @@ export const constructorSlice = createSlice({
       const { currIndex, nextIndex } = action.payload;
 
       // удаляем со старого места
-      state.ingredients.splice(action.payload.currIndex, 1);
+      state.ingredients.splice(currIndex, 1);
       // вставляем в новое
       state.ingredients.splice(nextIndex, 0, prevIngredients[currIndex]);
     },
