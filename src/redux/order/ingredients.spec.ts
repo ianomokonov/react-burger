@@ -1,14 +1,10 @@
 import {
+  initialState,
   orderNumberError,
   orderNumberRequest,
   orderNumberSuccess,
   orderReducer,
 } from "./order.slice";
-
-const initialState = {
-  orderNumberRequest: false,
-  orderNumberError: false,
-};
 
 it("should return the initial state", () => {
   expect(orderReducer(undefined, { type: undefined })).toEqual(initialState);

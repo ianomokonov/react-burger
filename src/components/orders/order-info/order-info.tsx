@@ -5,7 +5,6 @@ import { useLocation, useParams } from "react-router-dom";
 import { useTypedDispatch, useTypedSelector } from "redux/hooks";
 import { getFeed, getIngredients } from "redux/selectors";
 import { getOrderThunk } from "redux/feed/thunks";
-import { getIngredientsThunk } from "redux/ingredients/thunks";
 
 export const OrderInfo: FC = () => {
   const { state } = useLocation();
@@ -39,13 +38,6 @@ export const OrderInfo: FC = () => {
         .filter((ingredient) => ingredient.data !== undefined) || []
     );
   }, [activeOrder, allIngredients]);
-
-  useEffect(() => {
-    if (allIngredients?.length) {
-      return;
-    }
-    dispatch(getIngredientsThunk());
-  }, [allIngredients, dispatch]);
 
   const totalPrice = useMemo(() => {
     return (

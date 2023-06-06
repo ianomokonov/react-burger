@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { ForgotPassword } from "pages/forgot-password/forgot-password";
 import { Ingredient } from "pages/ingredient/ingredient";
@@ -16,11 +16,17 @@ import { ProtectedRoute } from "components/protected-route/protected-route";
 import { Feed } from "pages/feed/feed";
 import { OrderInfo } from "components/orders/order-info/order-info";
 import { OrdersHistory } from "pages/profile/orders-history/orders-history";
+import { getIngredientsThunk } from "redux/ingredients/thunks";
+import { useTypedDispatch } from "redux/hooks";
 
 const App: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state;
+  const dispatch = useTypedDispatch();
+  useEffect(() => {
+    dispatch(getIngredientsThunk());
+  }, [dispatch]);
   return (
     <>
       <Routes location={state?.background || location}>

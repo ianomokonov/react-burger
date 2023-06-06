@@ -9,7 +9,7 @@ import { BurgerIngredient } from "interfaces/burger-ingredient";
 import { IngredientType } from "interfaces/ingredient-type";
 import { ConstructorIngredient } from "interfaces/constructor-ingredient";
 
-const initialState: ConstructorState = {
+export const initialState: ConstructorState = {
   ingredients: [],
 };
 
@@ -17,6 +17,10 @@ export const constructorSlice = createSlice({
   name: "constructor",
   initialState,
   reducers: {
+    clearConstructor: (state) => {
+      state.bun = undefined;
+      state.ingredients = [];
+    },
     setBun: (state, action: PayloadAction<BurgerIngredient>) => {
       if (action.payload.type !== IngredientType.Bun) {
         return;
@@ -53,7 +57,12 @@ export const constructorSlice = createSlice({
   },
 });
 
-export const { addIngredient, removeIngredient, updateOrder, setBun } =
-  constructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  updateOrder,
+  setBun,
+  clearConstructor,
+} = constructorSlice.actions;
 
 export const constructorReducer = constructorSlice.reducer;

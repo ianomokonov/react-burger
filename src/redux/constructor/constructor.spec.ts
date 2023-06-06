@@ -1,15 +1,13 @@
 import { IngredientType } from "interfaces/ingredient-type";
 import {
   addIngredient,
+  clearConstructor,
   constructorReducer,
+  initialState,
   removeIngredient,
   setBun,
   updateOrder,
 } from "./constructor.slice";
-
-const initialState = {
-  ingredients: [],
-};
 
 const ingredient = {
   _id: "123",
@@ -30,6 +28,12 @@ jest.mock("uuid", () => ({ v4: () => "123456789" }));
 
 it("should return the initial state", () => {
   expect(constructorReducer(undefined, { type: undefined })).toEqual(
+    initialState
+  );
+});
+
+it("should clear constructor", () => {
+  expect(constructorReducer(initialState, clearConstructor())).toEqual(
     initialState
   );
 });

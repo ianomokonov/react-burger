@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { OrderState } from "./models";
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   orderNumberRequest: false,
   orderNumberError: false,
 };

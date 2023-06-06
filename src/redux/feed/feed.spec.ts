@@ -4,20 +4,11 @@ import {
   activeOrderSuccess,
   connecting,
   feedReducer,
+  initialState,
   onError,
   onMessage,
   onOpen,
 } from "./feed.slice";
-
-const initialState = {
-  orders: [],
-  total: 0,
-  totalToday: 0,
-  isLoading: false,
-  hasError: false,
-  activeOrderHasError: false,
-  activeOrderLoading: false,
-};
 
 it("should return the initial state", () => {
   expect(feedReducer(undefined, { type: undefined })).toEqual(initialState);

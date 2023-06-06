@@ -4,12 +4,10 @@ import { FC, useEffect } from "react";
 import styles from "./feed.module.css";
 import { useTypedDispatch, useTypedSelector } from "redux/hooks";
 import { connect, disconnect, onMessage } from "redux/feed/feed.slice";
-import { getFeed, getIngredients } from "redux/selectors";
-import { getIngredientsThunk } from "redux/ingredients/thunks";
+import { getFeed } from "redux/selectors";
 
 export const Feed: FC = () => {
   const dispatch = useTypedDispatch();
-  const { ingredients: allIngredients } = useTypedSelector(getIngredients);
   useEffect(() => {
     dispatch(
       connect({
@@ -21,14 +19,6 @@ export const Feed: FC = () => {
       dispatch(disconnect());
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    if (allIngredients?.length) {
-      return;
-    }
-
-    dispatch(getIngredientsThunk());
-  }, [allIngredients, dispatch]);
 
   const { orders } = useTypedSelector(getFeed);
   return (

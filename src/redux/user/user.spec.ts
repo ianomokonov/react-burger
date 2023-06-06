@@ -1,12 +1,11 @@
 import {
+  initialState,
   setProfileInfo,
   setResetEmail,
   setUserErrorMessage,
   setUserOrders,
   userReducer,
 } from "./user.slice";
-
-const initialState = { orders: [] };
 
 it("should return the initial state", () => {
   expect(userReducer(undefined, { type: undefined })).toEqual(initialState);

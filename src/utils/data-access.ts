@@ -8,12 +8,23 @@ import { CreateUserRequest } from "./models/create-user.request";
 import { UpdateUserRequest } from "./models/update-user.request";
 import { FeedOrder } from "redux/feed/models";
 
-const checkReponse = (res: Response) => {
-  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+const checkResponse = (res: Response) => {
+  if (res.ok) {
+    return res.json();
+  }
+
+  return Promise.reject(`Ошибка ${res.status}`);
+};
+
+const checkSuccess = <T extends { success: boolean }>(res: T) => {
+  if (res && res.success) {
+    return res;
+  }
+  return Promise.reject(`Ответ не success: ${res}`);
 };
 
 export const refreshTokenFunc = (token: string): Promise<TokenResponse> => {
-  return post(`${BASE_URL}/auth/token`, { token }, false);
+  return post(`/auth/token`, { token }, false);
 };
 
 const fetchWithAuth = (
@@ -37,46 +48,60 @@ const fetchWithAuth = (
   });
 };
 
+const request = (endpoint: string, options?: RequestInit, withAuth = true) => {
+  return (withAuth ? fetchWithAuth : fetch)(`${BASE_URL}${endpoint}`, options)
+    .then(checkResponse)
+    .then(checkSuccess);
+};
+
 const get = (url: string) => {
-  return fetchWithAuth(url).then(checkReponse);
+  return request(url);
 };
 
 const post = <T>(url: string, body: T, withAuth = true) => {
-  return (withAuth ? fetchWithAuth : fetch)(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
+  return request(
+    url,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(body),
     },
-    body: JSON.stringify(body),
-  }).then(checkReponse);
+    withAuth
+  );
 };
 
 const patch = <T>(url: string, body: T, withAuth = true) => {
-  return (withAuth ? fetchWithAuth : fetch)(url, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
+  return request(
+    url,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(body),
     },
-    body: JSON.stringify(body),
-  }).then(checkReponse);
+    withAuth
+  );
 };
 
 export const getIngredients = (): Promise<IngredientListResponse> => {
-  return get(`${BASE_URL}/ingredients`);
+  return get(`/ingredients`);
 };
 
 export const getOrder = (id: number): Promise<FeedOrder> => {
-  return get(`${BASE_URL}/orders/${id}`).then((x) => {
+  return get(`/orders/${id}`).then((x) => {
     return x.orders[0];
   });
 };
 
 export const makeOrder = (ingredients: string[]) => {
-  return post(`${BASE_URL}/orders`, { ingredients });
+  return post(`/orders`, { ingredients });
 };
 
 export const login = (userData: LoginRequest): Promise<ProfileState> => {
-  return post(`${BASE_URL}/auth/login`, userData, false).then(
+  return post(`/auth/login`, userData, false).then(
     ({ accessToken, refreshToken, user }) => {
       setTokens([accessToken, refreshToken]);
       return user;
@@ -87,7 +112,7 @@ export const login = (userData: LoginRequest): Promise<ProfileState> => {
 export const createUser = (
   userData: CreateUserRequest
 ): Promise<ProfileState> => {
-  return post(`${BASE_URL}/auth/register`, userData, false).then(
+  return post(`/auth/register`, userData, false).then(
     ({ accessToken, refreshToken, user }) => {
       setTokens([accessToken, refreshToken]);
       return user;
@@ -97,31 +122,29 @@ export const createUser = (
 
 export const logout = (): Promise<ProfileState> => {
   const { refreshToken } = getTokens();
-  return post(`${BASE_URL}/auth/logout`, { token: refreshToken }, false).then(
-    (res) => {
-      setTokens([null, null]);
-      return res;
-    }
-  );
+  return post(`/auth/logout`, { token: refreshToken }, false).then((res) => {
+    setTokens([null, null]);
+    return res;
+  });
 };
 
 export const resetPassword = (email: string): Promise<void> => {
-  return post(`${BASE_URL}/password-reset`, { email }, false);
+  return post(`/password-reset`, { email }, false);
 };
 
 export const resetPasswordWithCode = (
   token: string,
   password: string
 ): Promise<void> => {
-  return post(`${BASE_URL}/password-reset/reset`, { password, token }, false);
+  return post(`/password-reset/reset`, { password, token }, false);
 };
 
 export const getUser = (): Promise<ProfileState> => {
-  return get(`${BASE_URL}/auth/user`).then((res) => res.user);
+  return get(`/auth/user`).then((res) => res.user);
 };
 
 export const updateUser = (
   userData: UpdateUserRequest
 ): Promise<ProfileState> => {
-  return patch(`${BASE_URL}/auth/user`, userData).then((res) => res.user);
+  return patch(`/auth/user`, userData).then((res) => res.user);
 };

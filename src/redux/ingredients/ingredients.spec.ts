@@ -4,13 +4,8 @@ import {
   ingredientsReducer,
   ingredientsRequest,
   ingredientsSuccess,
+  initialState,
 } from "./ingredients.slice";
-
-const initialState = {
-  ingredients: [],
-  isLoading: false,
-  hasError: false,
-};
 
 const ingredient = {
   _id: "123",
