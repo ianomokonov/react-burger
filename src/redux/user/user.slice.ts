@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ProfileState, UserState } from "./models";
 import { FeedMessage } from "redux/feed/models";
 
-const initialState: UserState = { orders: [] };
+export const initialState: UserState = { orders: [] };
 
 export const userSlice = createSlice({
   name: "user",

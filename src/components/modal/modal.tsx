@@ -34,11 +34,13 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
   }
   return ReactDOM.createPortal(
     <>
-      <div className={styles.modal}>
+      <div className={styles.modal} data-test="modal">
         <div className={`${styles.modal__content} p-10`}>
           <div className={styles.modal__header}>
             <span className="text text_type_main-large">{title}</span>
-            <CloseIcon type="primary" onClick={onClose} />
+            <span data-test="close-btn">
+              <CloseIcon type="primary" onClick={onClose} />
+            </span>
           </div>
           {children}
         </div>

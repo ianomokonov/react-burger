@@ -20,8 +20,8 @@ import { ConstructorIngredient } from "interfaces/constructor-ingredient";
 import { DragIngredient } from "./drag-ingredient/drag-ingredient";
 import { Modal } from "components/modal/modal";
 import { OrderDetails } from "./order-details/order-details";
-import { getUser } from "redux/selectors";
 import { useNavigate } from "react-router-dom";
+import { getTokens } from "utils/token";
 
 /** получить данные конструктора */
 const getConstructorData = (state: RootState) => ({
@@ -33,8 +33,6 @@ const getConstructorData = (state: RootState) => ({
 export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
   const { bun, ingredients, allIngredients } =
     useTypedSelector(getConstructorData);
-
-  const { profile } = useTypedSelector(getUser);
 
   const dispatch = useTypedDispatch();
 
@@ -116,7 +114,9 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
       return;
     }
 
-    if (!profile) {
+    const { token } = getTokens();
+
+    if (!token) {
       navigate("/login", { state: { redirectUrl: "/" } });
       return;
     }
@@ -161,7 +161,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
     <>
       <div className={`pl-4 pb-4 ${className}`}>
         {!!bun ? (
-          <div className="pl-8" ref={topBunDropRef}>
+          <div className="pl-8" data-test="bun-drop" ref={topBunDropRef}>
             <ConstructorElement
               type="top"
               extraClass="mb-4"
@@ -174,6 +174,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
         ) : (
           <div className="pl-8">
             <div
+              data-test="bun-drop"
               ref={topBunDropRef}
               className={`constructor-element constructor-element_pos_top mb-4 centered ${
                 styles.bun_empty
@@ -190,6 +191,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
 
         <div
           ref={itemsDropRef}
+          data-test="main-drop"
           className={`${styles.main} custom-scroll ${
             ingredients.length ? "" : styles.main_empty
           } ${isItemsHovered ? styles.dropable_hover : ""}`}
@@ -206,7 +208,11 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
         </div>
 
         {!!bun ? (
-          <div className="pl-8 mb-10" ref={bottomBunDropRef}>
+          <div
+            className="pl-8 mb-10"
+            data-test="bun-drop"
+            ref={bottomBunDropRef}
+          >
             <ConstructorElement
               type="bottom"
               isLocked={true}
@@ -220,6 +226,7 @@ export const BurgerContructor: FC<BurgerConstructorProps> = ({ className }) => {
           <div className="pl-8 mb-10">
             <div
               ref={bottomBunDropRef}
+              data-test="bun-drop"
               className={`constructor-element constructor-element_pos_bottom mt-4 centered ${
                 styles.bun_empty
               } ${

@@ -35,7 +35,12 @@ export const IngredientCard: FC<IngredientCardProps> = ({
     []
   );
   return (
-    <div className={styles.ingredient} onClick={onClick} ref={ingredientRef}>
+    <div
+      className={styles.ingredient}
+      onClick={onClick}
+      ref={ingredientRef}
+      data-ingredient={type}
+    >
       <img src={image} alt="" className={styles.ingredient__img} />
       <p className={styles.ingredient__price}>
         <span className="mr-4 text text_type_main-default">{price}</span>
